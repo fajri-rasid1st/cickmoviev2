@@ -2,14 +2,14 @@ package com.example.cickmoviev2.ui.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.cickmoviev2.R;
@@ -17,6 +17,8 @@ import com.example.cickmoviev2.ui.fragments.FavoriteFragment;
 import com.example.cickmoviev2.ui.fragments.MovieFragment;
 import com.example.cickmoviev2.ui.fragments.TvShowFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -64,17 +66,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_toolbar_menu, menu);
 
-        for (int i = 0; i < menu.size(); i++) {
-            Drawable drawable = menu.getItem(i).getIcon();
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
 
-            if (drawable != null) {
-                drawable.mutate();
-                drawable.setColorFilter(getResources()
-                        .getColor(R.color.textOnPrimary), PorterDuff.Mode.SRC_ATOP);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
-        }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         return true;
     }
@@ -82,13 +90,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void setSelectedItem(BottomNavigationView bnvMain) {
         if (getIntent().getStringExtra("SELECTED_FRAGMENT") != null) {
             switch (getIntent().getStringExtra("SELECTED_FRAGMENT")) {
-                case "movie":
+                case "MOVIE":
                     bnvMain.setSelectedItemId(R.id.menu_item_movie);
                     break;
-                case "tv_show":
+                case "TV_SHOW":
                     bnvMain.setSelectedItemId(R.id.menu_item_tv_show);
                     break;
-                case "favorite":
+                case "FAVORITE":
                     bnvMain.setSelectedItemId(R.id.menu_item_favorite);
                     break;
             }
@@ -98,8 +106,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void setActionBar(String title) {
-        getSupportActionBar().setTitle(title);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(title);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
     }
 
     private void startFragment(Fragment selectedFragment) {

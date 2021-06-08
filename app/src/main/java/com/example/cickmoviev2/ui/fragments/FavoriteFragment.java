@@ -63,8 +63,10 @@ public class FavoriteFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         FavoritePagerAdapter favoritePagerAdapter = new FavoritePagerAdapter(getChildFragmentManager());
 
-        favoritePagerAdapter.addFragment(new FavoriteMovieFragment(), "Movie");
-        favoritePagerAdapter.addFragment(new FavoriteTvShowFragment(), "TV Show");
+        favoritePagerAdapter.addFragment(new FavoriteMovieFragment(),
+                getString(R.string.label_movie));
+        favoritePagerAdapter.addFragment(new FavoriteTvShowFragment(),
+                getString(R.string.label_tv));
 
         viewPager.setAdapter(favoritePagerAdapter);
     }

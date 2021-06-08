@@ -4,7 +4,8 @@
     <string name="label_movie">Movie</string>
     <string name="label_tv">TV Show</string>
     <string name="label_favorite">Favorite</string>
-    <string name="search">search</string>
+    <string name="search">Search</string>
+    <string name="searching">Search…</string>
     <string name="title">Title Of Movie or TV : This Title Can Be Multiple Line So Be Aware!</string>
     <string name="dummy_text">Lorem ipsum dolor sit amet, consect adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes. Cum sociis natoque penatibus et magnis dis parturient montes. Cum sociis natoque penatibus et magnis dis parturient montes.</string>
     <string name="library">Library</string>
@@ -22,7 +23,7 @@
     <string name="dot">‏‏‏‏‎ ‎ ‎‎‎•‏‏‎ ‏‏‎ ‎</string>
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="v2_0">V2.0</string>
-    <string name="translate">translate</string>
+    <string name="translate">Translate</string>
     <string name="your_favorite_movie_still_empty">Your Favorite Movie Still Empty</string>
     <string name="your_favorite_tvshow_still_empty">Your Favorite TV Show Still Empty</string>
     <string name="it_looks_like">It looks like your internet connection has been lost. Connect to the internet, then come back again.</string>
