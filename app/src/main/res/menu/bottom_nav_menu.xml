@@ -14,7 +14,7 @@
         android:title="@string/label_tv" />
 
     <item
-        android:id="@+id/menu_item_library"
+        android:id="@+id/menu_item_favorite"
         android:enabled="true"
         android:icon="@drawable/custom_favorite_icon"
         android:title="@string/label_favorite" />

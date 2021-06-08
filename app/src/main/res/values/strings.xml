@@ -6,9 +6,7 @@
     <string name="label_favorite">Favorite</string>
     <string name="search">search</string>
     <string name="title">Title Of Movie or TV : This Title Can Be Multiple Line So Be Aware!</string>
-    <string name="dummy_text">
-        Lorem ipsum dolor sit amet, consect adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes. Cum sociis natoque penatibus et magnis dis parturient montes. Cum sociis natoque penatibus et magnis dis parturient montes.
-    </string>
+    <string name="dummy_text">Lorem ipsum dolor sit amet, consect adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes. Cum sociis natoque penatibus et magnis dis parturient montes. Cum sociis natoque penatibus et magnis dis parturient montes.</string>
     <string name="library">Library</string>
     <string name="detail">Detail</string>
     <string name="runtime">24 Mins</string>
@@ -25,4 +23,8 @@
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="v2_0">V2.0</string>
     <string name="translate">translate</string>
+    <string name="your_favorite_movie_still_empty">Your Favorite Movie Still Empty</string>
+    <string name="your_favorite_tvshow_still_empty">Your Favorite TV Show Still Empty</string>
+    <string name="it_looks_like">It looks like your internet connection has been lost. Connect to the internet, then come back again.</string>
+    <string name="press_the_add_to_favorite_movie">Press the \"Add to Favorite\" button on the Movie or TV Show details to add a list of favorite.</string>
 </resources>
