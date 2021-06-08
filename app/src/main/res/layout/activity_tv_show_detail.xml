@@ -4,6 +4,421 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primaryColor"
     tools:context=".ui.activities.TvShowDetailActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbDetail"
+        style="@style/Theme.Cickmoviev2"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        android:background="#00FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/detail_toolbar_menu" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/lpiTvshowDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:hideAnimationBehavior="outward"
+        app:indicatorColor="@color/secondaryColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tbDetail"
+        app:minHideDelay="2000"
+        app:showAnimationBehavior="inward"
+        app:trackCornerRadius="4dp" />
+
+    <RelativeLayout
+        android:id="@+id/rlDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lpiTvshowDetail">
+
+        <TextView
+            android:id="@+id/tvDetail"
+            style="@style/TextContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/tvDetail"
+            android:layout_alignEnd="@id/tvDetail"
+            android:background="@color/secondaryColor" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/svDetail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rlDetail">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="16dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clTitleDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                app:layout_constraintBottom_toTopOf="@id/clDetail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tvTvshowTitleDetail"
+                    style="@style/TextContent.Primary"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/simple_title" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTvshowTitleDetail">
+
+                    <TextView
+                        android:id="@+id/tvTvshowRuntimeDetail"
+                        style="@style/TextContent.SubText"
+                        android:layout_width="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/textOnSecondary"
+                        app:drawableStartCompat="@drawable/ic_baseline_av_timer_24"
+                        app:drawableTint="@color/textOnSecondary"
+                        tools:text="@string/runtime" />
+
+                    <TextView
+                        style="@style/TextContent.Title"
+                        android:layout_width="wrap_content"
+                        android:text="@string/dot" />
+
+                    <TextView
+                        android:id="@+id/tvTvshowVoteCountDetail"
+                        style="@style/TextContent.SubText"
+                        android:layout_width="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/textOnSecondary"
+                        app:drawableStartCompat="@drawable/ic_outline_thumb_up_24"
+                        app:drawableTint="@color/textOnSecondary"
+                        tools:text="@string/vote_count" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clTitleDetail">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clDetailBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="265dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivTvshowBannerDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ContentDescription"
+                        tools:src="@drawable/sample_poster" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/detail_banner_1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/detail_banner_2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clDetailContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="145dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/clDetailBanner">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvPosterDetail"
+                        android:layout_width="110dp"
+                        android:layout_height="160dp"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginStart="24dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/ivTvshowPosterDetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            tools:ignore="ContentDescription"
+                            tools:src="@drawable/sample_poster" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvTvshowFullTitleDetail"
+                        style="@style/TextFrame.Title"
+                        android:layout_width="0dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="24dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cvPosterDetail"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@string/title" />
+
+                    <TextView
+                        android:id="@+id/tvTvshowReleaseDetail"
+                        style="@style/TextFrame.Aired"
+                        android:layout_width="0dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cvPosterDetail"
+                        app:layout_constraintTop_toBottomOf="@id/tvTvshowFullTitleDetail"
+                        tools:text="Aug 26, 2016" />
+
+                    <LinearLayout
+                        android:id="@+id/llRatingBar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="24dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/cvPosterDetail"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTvshowReleaseDetail">
+
+                        <RatingBar
+                            android:id="@+id/rbTvshowVoteAverageDetail"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="12dp"
+                            android:isIndicator="true"
+                            android:numStars="5"
+                            android:progressBackgroundTint="@color/textOnPrimary"
+                            android:progressTint="@color/secondaryColor"
+                            android:scaleX="1.1"
+                            android:scaleY="1.1"
+                            android:stepSize="0.01"
+                            android:transformPivotX="0dp"
+                            android:transformPivotY="0dp"
+                            tools:rating="3" />
+
+                        <TextView
+                            android:id="@+id/tvTvshowVoteAverageDetail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/poppins"
+                            android:textColor="@color/textOnPrimary"
+                            android:textSize="12sp"
+                            tools:text="6.87" />
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clBtnContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clDetail">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnWatch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/watch"
+                    app:backgroundTint="@color/secondaryColor"
+                    app:icon="@drawable/ic_baseline_play_arrow_24"
+                    app:iconGravity="textStart"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btnFavorite"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFavorite"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:text="@string/favorite"
+                    android:textColor="@color/secondaryColor"
+                    app:icon="@drawable/ic_outline_favorite_border_24"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/secondaryColor"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/btnWatch"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:rippleColor="@color/darkSecondaryColor"
+                    app:strokeColor="@color/secondaryColor" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/vSeparator0"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/primaryColor"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clBtnContainer" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clGenresContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vSeparator0">
+
+                <TextView
+                    android:id="@+id/tvGenresTitle"
+                    style="@style/TextContent.Title"
+                    android:text="@string/genres"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvTvshowGenresDetail"
+                    style="@style/TextContent.SubText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvGenresTitle"
+                    tools:text="Romance, Supernatural, School, Drama" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/vSeparator1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/primaryColor"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clGenresContainer" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clOverviewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginVertical="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vSeparator1">
+
+                <TextView
+                    android:id="@+id/tvOverviewTitle"
+                    style="@style/TextContent.Title"
+                    android:text="@string/overview"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.ms.square.android.expandabletextview.ExpandableTextView
+                    android:id="@+id/etvTvshowOverviewDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:animAlphaStart="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvOverviewTitle"
+                    app:maxCollapsedLines="4">
+
+                    <TextView
+                        android:id="@+id/expandable_text"
+                        style="@style/TextContent.SubText" />
+
+                    <ImageButton
+                        android:id="@id/expand_collapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|bottom"
+                        android:background="@android:color/transparent"
+                        android:paddingStart="8dp"
+                        android:paddingBottom="8dp"
+                        app:tint="@color/secondaryColor"
+                        tools:ignore="ContentDescription,RtlSymmetry" />
+
+                </com.ms.square.android.expandabletextview.ExpandableTextView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

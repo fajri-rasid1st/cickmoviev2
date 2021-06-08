@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvPosterGrid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="6dp"
+        android:backgroundTint="@color/textOnPrimary"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="6dp"
+        app:layout_constraintBottom_toTopOf="@id/tvTitleGrid"
+        app:layout_constraintDimensionRatio="4:6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivPosterGrid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/sample_poster" />
+
+        <TextView
+            android:id="@+id/tvVoteAverageGrid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/item_grid_rating_bg"
+            android:drawableStart="@drawable/ic_baseline_star_24"
+            android:drawablePadding="4dp"
+            android:elevation="6dp"
+            android:fontFamily="@font/poppins"
+            android:padding="6dp"
+            android:textColor="@color/textOnPrimary"
+            android:textSize="12sp"
+            tools:ignore="UseCompatTextViewDrawableXml"
+            tools:text="7.8" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvTitleGrid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="6dp"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/poppins_semibold"
+        android:maxLines="2"
+        android:textColor="@color/textOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvPosterGrid"
+        tools:text="This Is A Title : Lorem Ipsum Dolor Sit Amet" />
+
+    <TextView
+        android:id="@+id/tvReleaseGrid"
+        style="@style/TextContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="6dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/textOnSecondary"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleGrid"
+        tools:text="2021" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,28 @@
 <resources>
-    <string name="app_name">cickmoviev2</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">CickMovieV2</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="label_movie">Movie</string>
+    <string name="label_tv">TV Show</string>
+    <string name="label_favorite">Favorite</string>
+    <string name="search">search</string>
+    <string name="title">Title Of Movie or TV : This Title Can Be Multiple Line So Be Aware!</string>
+    <string name="dummy_text">
+        Lorem ipsum dolor sit amet, consect adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes. Cum sociis natoque penatibus et magnis dis parturient montes. Cum sociis natoque penatibus et magnis dis parturient montes.
+    </string>
+    <string name="library">Library</string>
+    <string name="detail">Detail</string>
+    <string name="runtime">24 Mins</string>
+    <string name="vote_count">2489 Votes</string>
+    <string name="comix_wave_film">CoMix Wave Film</string>
+    <string name="favorite">Favorite</string>
+    <string name="genres">genres</string>
+    <string name="overview">overview</string>
+    <string name="read_more">read more</string>
+    <string name="watch">watch</string>
+    <string name="preview">preview</string>
+    <string name="simple_title">The Garden Of Words</string>
+    <string name="dot">‏‏‏‏‎ ‎ ‎‎‎•‏‏‎ ‏‏‎ ‎</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="v2_0">V2.0</string>
+    <string name="translate">translate</string>
 </resources>
