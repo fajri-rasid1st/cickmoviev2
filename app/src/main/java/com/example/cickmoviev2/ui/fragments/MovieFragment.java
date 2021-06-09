@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.cickmoviev2.R;
 import com.example.cickmoviev2.data.api.repository.MovieRepository;
@@ -107,12 +108,12 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
     @Override
     public boolean onQueryTextChange(String newText) {
         if (newText.length() > 0) {
-            gridAdapter = null;
             lpiMovie.show();
-            getRepositoryData(newText, currentPage);
+            gridAdapter = null;
+            getRepositoryData(newText, 1);
         } else {
             gridAdapter = null;
-            getRepositoryData("", currentPage);
+            getRepositoryData("", 1);
         }
 
         return true;
@@ -156,6 +157,8 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
 
                 @Override
                 public void onFailure(String message) {
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
                     if (!responseSuccess) clMovieError.setVisibility(View.VISIBLE);
 
                     new Handler().postDelayed(() -> {
@@ -187,6 +190,8 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
 
                 @Override
                 public void onFailure(String message) {
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
                     clMovieError.setVisibility(View.VISIBLE);
                     rvMovie.setVisibility(View.GONE);
 
@@ -215,9 +220,8 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
                         isFetching = true;
                         currentPage++;
                         getRepositoryData("", currentPage);
+                        isFetching = false;
                     }
-
-                    isFetching = false;
                 }
             }
         });
