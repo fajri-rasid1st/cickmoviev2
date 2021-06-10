@@ -24,6 +24,7 @@ import com.example.cickmoviev2.R;
 import com.example.cickmoviev2.data.api.repository.MovieRepository;
 import com.example.cickmoviev2.data.api.repository.callback.OnCastCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnMovieCallback;
+import com.example.cickmoviev2.data.local.database.FavoriteDatabase;
 import com.example.cickmoviev2.data.models.Cast;
 import com.example.cickmoviev2.data.models.Credit;
 import com.example.cickmoviev2.data.models.Genres;
@@ -41,6 +42,7 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
     private RecyclerView rvMovieCast;
     private MaterialButton btnFavorite;
     private Movie movie;
+    private FavoriteDatabase roomDatabase;
     private List<Genres> movieGenres;
     private List<Cast> movieCasts;
     private boolean isFavorite = false;
@@ -51,6 +53,8 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_movie_detail);
 
         movieRepository = MovieRepository.getInstance();
+        roomDatabase = FavoriteDatabase.getInstance(getApplicationContext());
+
         lpiMovieDetail = findViewById(R.id.lpiMovieDetail);
         rvMovieCast = findViewById(R.id.rvMovieCast);
         btnFavorite = findViewById(R.id.btnFavorite);
@@ -64,12 +68,23 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getIntent().getStringExtra("TITLE"));
 
+        checkIsFavorite(getIntent().getStringExtra("ID"));
         loadMovie(getIntent().getStringExtra("ID"));
+    }
+
+    private void checkIsFavorite(String movieId) {
+        isFavorite = roomDatabase.favoriteDao().isMovieExist(Integer.parseInt(movieId));
+
+        if (!isFavorite) {
+            btnFavorite.setIconResource(R.drawable.ic_baseline_favorite_24);
+        } else {
+            btnFavorite.setIconResource(R.drawable.ic_outline_favorite_24);
+        }
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnFavorite) btnFavoriteHandler();
+        // if (view.getId() == R.id.btnFavorite) btnFavoriteHandler();
     }
 
     @Override
@@ -172,17 +187,5 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
         Glide.with(MovieDetailActivity.this)
                 .load(Const.IMG_URL_500 + movie.getBackdropUrl())
                 .into(ivBanner);
-    }
-
-    private void btnFavoriteHandler() {
-        if (!isFavorite) {
-            btnFavorite.setIconResource(R.drawable.ic_baseline_favorite_24);
-            Toast.makeText(this, "Movie has been added to favorite", Toast.LENGTH_SHORT).show();
-        } else {
-            btnFavorite.setIconResource(R.drawable.ic_outline_favorite_24);
-            Toast.makeText(this, "Movie has been removed from favorite", Toast.LENGTH_SHORT).show();
-        }
-
-        isFavorite = !isFavorite;
     }
 }

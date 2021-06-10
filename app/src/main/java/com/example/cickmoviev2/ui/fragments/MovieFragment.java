@@ -35,7 +35,6 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
         SwipeRefreshLayout.OnRefreshListener,
         SearchView.OnQueryTextListener {
 
-    private static final String TAG = "MOVIE";
     private SwipeRefreshLayout srlMovie;
     private LinearProgressIndicator lpiMovie;
     private ConstraintLayout clMovieError;
@@ -123,7 +122,6 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
     public void onClick(MoviePopular moviePopular) {
         Intent movieDetailActivity = new Intent(getContext(), MovieDetailActivity.class);
 
-        movieDetailActivity.putExtra("TAG", TAG);
         movieDetailActivity.putExtra("ID", moviePopular.getId());
         movieDetailActivity.putExtra("TITLE", moviePopular.getTitle());
 
