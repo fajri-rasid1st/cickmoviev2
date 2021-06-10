@@ -15,9 +15,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,UnusedAttribute">
 
-        <activity
-            android:name=".ui.activities.SplashScreenActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".ui.activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,17 +23,12 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.activities.TvShowDetailActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activities.TvShowDetailActivity" />
 
-        <activity
-            android:name=".ui.activities.MovieDetailActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activities.MovieDetailActivity" />
 
         <activity
             android:name=".ui.activities.MainActivity"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <meta-data

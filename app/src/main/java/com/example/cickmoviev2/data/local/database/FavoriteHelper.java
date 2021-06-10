@@ -74,26 +74,4 @@ public class FavoriteHelper {
 
         return status;
     }
-
-    @SuppressLint("CheckResult")
-    public boolean deleteAllFavoriteMovies() {
-        roomDatabase.favoriteDao().deleteAllMovies().subscribe(() -> {
-            status = true;
-        }, throwable -> {
-            status = false;
-        });
-
-        return status;
-    }
-
-    @SuppressLint("CheckResult")
-    public boolean deleteAllFavoriteTvShow() {
-        roomDatabase.favoriteDao().deleteAllTvShows().subscribe(() -> {
-            status = true;
-        }, throwable -> {
-            status = false;
-        });
-
-        return status;
-    }
 }

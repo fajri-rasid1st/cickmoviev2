@@ -59,7 +59,7 @@ public class FavoriteTvShow implements Serializable {
     }
 
     public String getVoteAverage() {
-        return voteAverage;
+        return voteAverage != null ? voteAverage : "0";
     }
 
     public void setVoteAverage(String voteAverage) {

@@ -49,6 +49,10 @@ public class TvShowListAdapter extends RecyclerView.Adapter<TvShowListAdapter.Vi
         return favoriteTvShowList.size();
     }
 
+    public FavoriteTvShow getTvShowAt(int position) {
+        return favoriteTvShowList.get(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         FavoriteTvShow favoriteTvShow;
         ImageView ivPoster;

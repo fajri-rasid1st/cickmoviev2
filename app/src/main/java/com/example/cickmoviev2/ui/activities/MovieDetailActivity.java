@@ -190,6 +190,11 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
         ImageView ivPoster = findViewById(R.id.ivMoviePosterDetail);
         ImageView ivBanner = findViewById(R.id.ivMovieBannerDetail);
 
+        favTitle = movie.getTitle();
+        favPoster = movie.getPosterUrl();
+        favVoteAverage = movie.getVoteAverage();
+        favOverview = movie.getOverview();
+
         tvTitle.setText(movie.getTitle());
         tvRuntimeDetail.setText(movie.getRuntime());
         tvVoteCount.setText(movie.getVoteCount());
@@ -198,11 +203,6 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
         tvVoteAverage.setText(movie.getVoteAverage());
         etvOverview.setText(movie.getOverview());
         rbVoteAverage.setRating(Float.parseFloat(movie.getVoteAverage()) / 2);
-
-        favTitle = movie.getTitle();
-        favPoster = movie.getPosterUrl();
-        favVoteAverage = movie.getVoteAverage();
-        favOverview = movie.getOverview();
 
         StringBuilder genresText = new StringBuilder();
 

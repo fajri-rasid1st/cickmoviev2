@@ -26,9 +26,6 @@ public interface FavoriteDao {
     @Query("SELECT EXISTS (SELECT * FROM favorite_movie_table WHERE id=:id)")
     boolean isMovieExist(int id);
 
-    @Query("DELETE FROM favorite_movie_table")
-    Completable deleteAllMovies();
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable addFavoriteMovie(FavoriteMovie favoriteMovie);
 
@@ -44,9 +41,6 @@ public interface FavoriteDao {
 
     @Query("SELECT EXISTS (SELECT * FROM favorite_tv_show_table WHERE id=:id)")
     boolean isTvShowExist(int id);
-
-    @Query("DELETE FROM favorite_tv_show_table")
-    Completable deleteAllTvShows();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable addFavoriteTvShow(FavoriteTvShow favoriteTvShow);
