@@ -26,6 +26,7 @@ public class TvShowRepository {
         this.tvShowService = tvShowService;
     }
 
+    // create singleton instance for this class
     public static TvShowRepository getInstance() {
         if (tvShowRepository == null) {
             Retrofit retrofit = new Retrofit.Builder()
@@ -39,10 +40,13 @@ public class TvShowRepository {
         return tvShowRepository;
     }
 
+    // method to get popular tv shows
     public void getPopularTvShows(final OnPopularTvShowsCallback callback, int page) {
         tvShowService.getPopularTvShows(Const.API_KEY, page).enqueue(new Callback<TvShowPopularResponse>() {
             @Override
+            // this method called when response on progress
             public void onResponse(@NonNull Call<TvShowPopularResponse> call, @NonNull Response<TvShowPopularResponse> response) {
+                // response is successful if code() is in the range [200..300)
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.body().getPopulars() != null) {
@@ -58,6 +62,7 @@ public class TvShowRepository {
                 }
             }
 
+            // this method called when response on failure
             @Override
             public void onFailure(@NonNull Call<TvShowPopularResponse> call, @NonNull Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
@@ -65,6 +70,7 @@ public class TvShowRepository {
         });
     }
 
+    // method to get detail tv show
     public void getTvShow(String tvId, final OnTvShowCallback callback) {
         tvShowService.getTvShow(tvId, Const.API_KEY).enqueue(new Callback<TvShow>() {
             @Override
@@ -87,6 +93,7 @@ public class TvShowRepository {
         });
     }
 
+    // method to get tv show casts
     public void getTvShowCast(String tvId, final OnCastCallback callback) {
         tvShowService.getTvShowCast(tvId, Const.API_KEY).enqueue(new Callback<Credit>() {
             @Override
@@ -109,6 +116,7 @@ public class TvShowRepository {
         });
     }
 
+    // method to get tv show list when searching
     public void searchTvShows(final OnTvShowSearchCallback callback, String query, int page) {
         tvShowService.searchTvShows(Const.API_KEY, query, page).enqueue(new Callback<TvShowPopularResponse>() {
             @Override

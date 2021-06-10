@@ -6,8 +6,10 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
+// create table favorite_movie_table with column names according to @ColumnInfo annotations
 @Entity(tableName = "favorite_movie_table")
 public class FavoriteMovie implements Serializable {
+    // primary key is taken based on the id of the movie.
     @PrimaryKey
     private int id;
 

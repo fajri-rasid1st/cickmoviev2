@@ -63,6 +63,7 @@ public class TvShowFragment extends Fragment implements OnTvShowItemClickListene
         srlTvShow = view.findViewById(R.id.srlTvshow);
         lpiTvShow = view.findViewById(R.id.lpiTvshow);
         clTvShowError = view.findViewById(R.id.clTvshowError);
+
         rvTvShow = view.findViewById(R.id.rvTvshow);
         tvShowRepository = TvShowRepository.getInstance();
 
@@ -93,8 +94,10 @@ public class TvShowFragment extends Fragment implements OnTvShowItemClickListene
     @Override
     public void onRefresh() {
         lpiTvShow.show();
+
         gridAdapter = null;
         currentPage = 1;
+
         getRepositoryData("", currentPage);
     }
 
@@ -108,6 +111,7 @@ public class TvShowFragment extends Fragment implements OnTvShowItemClickListene
     public boolean onQueryTextChange(String newText) {
         if (newText.length() > 0) {
             lpiTvShow.show();
+
             gridAdapter = null;
             getRepositoryData(newText, 1);
         } else {
@@ -150,6 +154,7 @@ public class TvShowFragment extends Fragment implements OnTvShowItemClickListene
 
                     currentPage = page;
                     isFetching = false;
+
                     srlTvShow.setRefreshing(false);
                     lpiTvShow.hide();
                 }
@@ -181,6 +186,7 @@ public class TvShowFragment extends Fragment implements OnTvShowItemClickListene
 
                     currentPage = page;
                     isFetching = false;
+
                     srlTvShow.setRefreshing(false);
                     lpiTvShow.hide();
                 }
@@ -213,8 +219,10 @@ public class TvShowFragment extends Fragment implements OnTvShowItemClickListene
                 if (firstVisibleItem + visibleItem >= totalItem / 2) {
                     if (!isFetching) {
                         isFetching = true;
+
                         currentPage++;
                         getRepositoryData("", currentPage);
+
                         isFetching = false;
                     }
                 }

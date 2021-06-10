@@ -26,6 +26,7 @@ public class MovieRepository {
         this.movieService = movieService;
     }
 
+    // create singleton instance for this class
     public static MovieRepository getInstance() {
         if (movieRepository == null) {
             Retrofit retrofit = new Retrofit.Builder()
@@ -39,10 +40,13 @@ public class MovieRepository {
         return movieRepository;
     }
 
+    // method to get popular movies
     public void getPopularMovies(final OnPopularMoviesCallback callback, int page) {
         movieService.getPopularMovies(Const.API_KEY, page).enqueue(new Callback<MoviePopularResponse>() {
+            // this method called when response on progress
             @Override
             public void onResponse(@NonNull Call<MoviePopularResponse> call, @NonNull Response<MoviePopularResponse> response) {
+                // response is successful if code() is in the range [200..300)
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.body().getPopulars() != null) {
@@ -58,6 +62,7 @@ public class MovieRepository {
                 }
             }
 
+            // this method called when response on failure
             @Override
             public void onFailure(@NonNull Call<MoviePopularResponse> call, @NonNull Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
@@ -65,6 +70,7 @@ public class MovieRepository {
         });
     }
 
+    // method to get detail movie
     public void getMovie(String movieId, final OnMovieCallback callback) {
         movieService.getMovie(movieId, Const.API_KEY).enqueue(new Callback<Movie>() {
             @Override
@@ -87,6 +93,7 @@ public class MovieRepository {
         });
     }
 
+    // method to get movie casts
     public void getMovieCast(String movieId, final OnCastCallback callback) {
         movieService.getMovieCast(movieId, Const.API_KEY).enqueue(new Callback<Credit>() {
             @Override
@@ -109,6 +116,7 @@ public class MovieRepository {
         });
     }
 
+    // method to get movies when searching
     public void searchMovies(final OnMovieSearchCallback callback, String query, int page) {
         movieService.searchMovies(Const.API_KEY, query, page).enqueue(new Callback<MoviePopularResponse>() {
             @Override

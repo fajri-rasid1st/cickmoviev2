@@ -29,8 +29,8 @@ import java.util.List;
 public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieItemClickListener {
     private ConstraintLayout clFavMovieEmpty;
     private RecyclerView rvFavMovie;
-    private FavoriteDatabase favoriteDatabase;
     private MovieListAdapter listAdapter;
+    private FavoriteDatabase favoriteDatabase;
     private FavoriteHelper favoriteHelper;
 
     public FavoriteMovieFragment() {
@@ -47,10 +47,11 @@ public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieIt
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorite_movie, container, false);
 
-        favoriteHelper = new FavoriteHelper(requireActivity().getApplicationContext());
-        favoriteDatabase = FavoriteDatabase.getInstance(requireActivity().getApplicationContext());
         clFavMovieEmpty = view.findViewById(R.id.clFavMovieEmpty);
         rvFavMovie = view.findViewById(R.id.rvFavMovie);
+
+        favoriteDatabase = FavoriteDatabase.getInstance(requireActivity().getApplicationContext());
+        favoriteHelper = new FavoriteHelper(requireActivity().getApplicationContext());
 
         rvFavMovie.setLayoutManager(new LinearLayoutManager(getActivity()));
         loadData();
@@ -73,9 +74,11 @@ public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieIt
                     @Override
                     public void onChanged(List<FavoriteMovie> favoriteMovies) {
                         listAdapter = new MovieListAdapter(favoriteMovies);
+
                         listAdapter.setClickListener(FavoriteMovieFragment.this);
                         listAdapter.notifyDataSetChanged();
                         rvFavMovie.setAdapter(listAdapter);
+
                         swipeToDelete(listAdapter, rvFavMovie);
 
                         if (favoriteMovies.size() == 0) {
@@ -95,6 +98,7 @@ public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieIt
         startActivity(movieDetailActivity);
     }
 
+    // this method is used for delete item in recycler view when swiped left or right
     private void swipeToDelete(MovieListAdapter listAdapter, RecyclerView rvFavMovie) {
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -104,16 +108,17 @@ public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieIt
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                // when item is successfully removed
                 if (favoriteHelper.deleteFavoriteMovie(listAdapter.getMovieAt(viewHolder.getAdapterPosition()).getId())) {
-
                     listAdapter.remove(viewHolder.getAdapterPosition());
                     rvFavMovie.removeViewAt(viewHolder.getAdapterPosition());
                     listAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                     listAdapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), listAdapter.getItemCount());
 
                     Toast.makeText(getContext(), "Movie Has Been Removed from Favorite", Toast.LENGTH_SHORT).show();
-
-                } else {
+                }
+                // when item is failed to remove
+                else {
                     Toast.makeText(getContext(), "Unable to Remove Movie from Favorite", Toast.LENGTH_SHORT).show();
                 }
             }

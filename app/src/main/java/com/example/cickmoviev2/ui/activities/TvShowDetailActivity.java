@@ -37,44 +37,50 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import java.util.List;
 
 public class TvShowDetailActivity extends AppCompatActivity implements View.OnClickListener {
-    private TvShowRepository tvShowRepository;
+    private Toolbar tbDetail;
     private LinearProgressIndicator lpiTvShowDetail;
-    private RecyclerView rvTvShowCast;
     private MaterialButton btnFavorite;
+    private RecyclerView rvTvShowCast;
+    private TvShowRepository tvShowRepository;
     private TvShow tvShow;
-    private FavoriteHelper favoriteHelper;
     private List<Genres> tvShowGenres;
     private List<Cast> tvShowCasts;
-    private boolean isFavorite = false;
-    private String EXTRAS_ID;
+    private FavoriteHelper favoriteHelper;
+    private String EXTRAS_ID, EXTRAS_TITLE;
     private String favTitle, favPoster, favVoteAverage, favOverview;
+    private boolean isFavorite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tv_show_detail);
 
-        EXTRAS_ID = getIntent().getStringExtra("ID");
-        String EXTRAS_TITLE = getIntent().getStringExtra("TITLE");
+        tbDetail = findViewById(R.id.tbDetail);
+        lpiTvShowDetail = findViewById(R.id.lpiTvshowDetail);
+        btnFavorite = findViewById(R.id.btnFavorite);
+        rvTvShowCast = findViewById(R.id.rvTvshowCast);
 
-        favoriteHelper = new FavoriteHelper(this);
         tvShowRepository = TvShowRepository.getInstance();
 
-        lpiTvShowDetail = findViewById(R.id.lpiTvshowDetail);
-        rvTvShowCast = findViewById(R.id.rvTvshowCast);
-        btnFavorite = findViewById(R.id.btnFavorite);
+        favoriteHelper = new FavoriteHelper(this);
+
+        EXTRAS_ID = getIntent().getStringExtra("ID");
+        EXTRAS_TITLE = getIntent().getStringExtra("TITLE");
+
         btnFavorite.setOnClickListener(this);
 
-        Toolbar tbDetail = findViewById(R.id.tbDetail);
+        setActionBar(EXTRAS_TITLE);
+        updateFavoriteButton(EXTRAS_ID);
+        loadTvShow(EXTRAS_ID);
+    }
+
+    private void setActionBar(String title) {
         setSupportActionBar(tbDetail);
         tbDetail.setTitleTextAppearance(this, R.style.WhiteTextAppearance);
 
         assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(EXTRAS_TITLE);
-
-        updateFavoriteButton(EXTRAS_ID);
-        loadTvShow(EXTRAS_ID);
     }
 
     private void updateFavoriteButton(String tvId) {
@@ -163,9 +169,11 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onSuccess(Credit credit, String message) {
                 tvShowCasts = credit.getCast();
+
                 rvTvShowCast.setAdapter(new CastAdapter(tvShowCasts));
                 rvTvShowCast.setLayoutManager(new LinearLayoutManager(TvShowDetailActivity.this, RecyclerView.HORIZONTAL, false));
                 rvTvShowCast.setHasFixedSize(true);
+
                 lpiTvShowDetail.hide();
             }
 

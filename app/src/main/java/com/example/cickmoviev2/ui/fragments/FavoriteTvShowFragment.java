@@ -29,8 +29,8 @@ import java.util.List;
 public class FavoriteTvShowFragment extends Fragment implements OnFavoriteTvShowItemClickListener {
     private ConstraintLayout clFavTvShowEmpty;
     private RecyclerView rvFavTvShow;
-    private FavoriteDatabase favoriteDatabase;
     private TvShowListAdapter listAdapter;
+    private FavoriteDatabase favoriteDatabase;
     private FavoriteHelper favoriteHelper;
 
     public FavoriteTvShowFragment() {
@@ -47,10 +47,11 @@ public class FavoriteTvShowFragment extends Fragment implements OnFavoriteTvShow
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorite_tv_show, container, false);
 
-        favoriteHelper = new FavoriteHelper(requireActivity().getApplicationContext());
-        favoriteDatabase = FavoriteDatabase.getInstance(requireActivity().getApplicationContext());
         clFavTvShowEmpty = view.findViewById(R.id.clFavTvShowEmpty);
         rvFavTvShow = view.findViewById(R.id.rvFavTvShow);
+
+        favoriteDatabase = FavoriteDatabase.getInstance(requireActivity().getApplicationContext());
+        favoriteHelper = new FavoriteHelper(requireActivity().getApplicationContext());
 
         rvFavTvShow.setLayoutManager(new LinearLayoutManager(getActivity()));
         loadData();
@@ -73,9 +74,11 @@ public class FavoriteTvShowFragment extends Fragment implements OnFavoriteTvShow
                     @Override
                     public void onChanged(List<FavoriteTvShow> favoriteTvShows) {
                         listAdapter = new TvShowListAdapter(favoriteTvShows);
+
                         listAdapter.setClickListener(FavoriteTvShowFragment.this);
                         listAdapter.notifyDataSetChanged();
                         rvFavTvShow.setAdapter(listAdapter);
+
                         swipeToDelete(listAdapter, rvFavTvShow);
 
                         if (favoriteTvShows.size() == 0) {
@@ -105,14 +108,12 @@ public class FavoriteTvShowFragment extends Fragment implements OnFavoriteTvShow
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (favoriteHelper.deleteFavoriteTvShow(listAdapter.getTvShowAt(viewHolder.getAdapterPosition()).getId())) {
-
                     listAdapter.remove(viewHolder.getAdapterPosition());
                     rvFavTvShow.removeViewAt(viewHolder.getAdapterPosition());
                     listAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                     listAdapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), listAdapter.getItemCount());
 
                     Toast.makeText(getContext(), "Tv Show Has Been Removed from Favorite", Toast.LENGTH_SHORT).show();
-
                 } else {
                     Toast.makeText(getContext(), "Unable to Remove Tv Show from Favorite", Toast.LENGTH_SHORT).show();
                 }

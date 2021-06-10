@@ -37,44 +37,50 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import java.util.List;
 
 public class MovieDetailActivity extends AppCompatActivity implements View.OnClickListener {
-    private MovieRepository movieRepository;
+    private Toolbar tbDetail;
     private LinearProgressIndicator lpiMovieDetail;
-    private RecyclerView rvMovieCast;
     private MaterialButton btnFavorite;
+    private RecyclerView rvMovieCast;
+    private MovieRepository movieRepository;
     private Movie movie;
-    private FavoriteHelper favoriteHelper;
     private List<Genres> movieGenres;
     private List<Cast> movieCasts;
-    private boolean isFavorite = false;
-    private String EXTRAS_ID;
+    private FavoriteHelper favoriteHelper;
+    private String EXTRAS_ID, EXTRAS_TITLE;
     private String favTitle, favPoster, favVoteAverage, favOverview;
+    private boolean isFavorite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
 
-        EXTRAS_ID = getIntent().getStringExtra("ID");
-        String EXTRAS_TITLE = getIntent().getStringExtra("TITLE");
+        tbDetail = findViewById(R.id.tbDetail);
+        lpiMovieDetail = findViewById(R.id.lpiMovieDetail);
+        btnFavorite = findViewById(R.id.btnFavorite);
+        rvMovieCast = findViewById(R.id.rvMovieCast);
 
-        favoriteHelper = new FavoriteHelper(this);
         movieRepository = MovieRepository.getInstance();
 
-        lpiMovieDetail = findViewById(R.id.lpiMovieDetail);
-        rvMovieCast = findViewById(R.id.rvMovieCast);
-        btnFavorite = findViewById(R.id.btnFavorite);
+        favoriteHelper = new FavoriteHelper(this);
+
+        EXTRAS_ID = getIntent().getStringExtra("ID");
+        EXTRAS_TITLE = getIntent().getStringExtra("TITLE");
+
         btnFavorite.setOnClickListener(this);
 
-        Toolbar tbDetail = findViewById(R.id.tbDetail);
+        setActionBar(EXTRAS_TITLE);
+        updateFavoriteButton(EXTRAS_ID);
+        loadMovie(EXTRAS_ID);
+    }
+
+    private void setActionBar(String title) {
         setSupportActionBar(tbDetail);
         tbDetail.setTitleTextAppearance(this, R.style.WhiteTextAppearance);
 
         assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(EXTRAS_TITLE);
-
-        updateFavoriteButton(EXTRAS_ID);
-        loadMovie(EXTRAS_ID);
     }
 
     private void updateFavoriteButton(String movieId) {
@@ -163,9 +169,11 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(Credit credit, String message) {
                 movieCasts = credit.getCast();
+
                 rvMovieCast.setAdapter(new CastAdapter(movieCasts));
                 rvMovieCast.setLayoutManager(new LinearLayoutManager(MovieDetailActivity.this, RecyclerView.HORIZONTAL, false));
                 rvMovieCast.setHasFixedSize(true);
+
                 lpiMovieDetail.hide();
             }
 

@@ -16,7 +16,7 @@ import io.reactivex.Completable;
 
 @Dao
 public interface FavoriteDao {
-    // movie
+    // queries for favorite_movie_table
     @Query("SELECT * FROM favorite_movie_table")
     LiveData<List<FavoriteMovie>> getAllMovies();
 
@@ -32,7 +32,7 @@ public interface FavoriteDao {
     @Delete
     Completable deleteFavoriteMovie(FavoriteMovie favoriteMovie);
 
-    // tv show
+    // queries for favorite_tv_show_table
     @Query("SELECT * FROM favorite_tv_show_table")
     LiveData<List<FavoriteTvShow>> getAllTvShows();
 

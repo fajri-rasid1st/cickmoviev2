@@ -63,6 +63,7 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
         srlMovie = view.findViewById(R.id.srlMovie);
         lpiMovie = view.findViewById(R.id.lpiMovie);
         clMovieError = view.findViewById(R.id.clMovieError);
+
         rvMovie = view.findViewById(R.id.rvMovie);
         movieRepository = MovieRepository.getInstance();
 
@@ -93,8 +94,10 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
     @Override
     public void onRefresh() {
         lpiMovie.show();
+
         gridAdapter = null;
         currentPage = 1;
+
         getRepositoryData("", currentPage);
     }
 
@@ -108,6 +111,7 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
     public boolean onQueryTextChange(String newText) {
         if (newText.length() > 0) {
             lpiMovie.show();
+
             gridAdapter = null;
             getRepositoryData(newText, 1);
         } else {
@@ -150,6 +154,7 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
 
                     currentPage = page;
                     isFetching = false;
+
                     srlMovie.setRefreshing(false);
                     lpiMovie.hide();
                 }
@@ -157,6 +162,7 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
                 @Override
                 public void onFailure(String message) {
                     if (!responseSuccess) clMovieError.setVisibility(View.VISIBLE);
+
                     new Handler().postDelayed(() -> {
                         srlMovie.setRefreshing(false);
                         lpiMovie.hide();
@@ -180,6 +186,7 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
 
                     currentPage = page;
                     isFetching = false;
+
                     srlMovie.setRefreshing(false);
                     lpiMovie.hide();
                 }
@@ -188,6 +195,7 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
                 public void onFailure(String message) {
                     clMovieError.setVisibility(View.VISIBLE);
                     rvMovie.setVisibility(View.GONE);
+
                     new Handler().postDelayed(() -> {
                         srlMovie.setRefreshing(false);
                         lpiMovie.hide();
@@ -211,8 +219,10 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
                 if (firstVisibleItem + visibleItem >= totalItem / 2) {
                     if (!isFetching) {
                         isFetching = true;
+
                         currentPage++;
                         getRepositoryData("", currentPage);
+
                         isFetching = false;
                     }
                 }
