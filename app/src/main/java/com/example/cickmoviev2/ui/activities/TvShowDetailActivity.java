@@ -24,6 +24,7 @@ import com.example.cickmoviev2.R;
 import com.example.cickmoviev2.data.api.repository.TvShowRepository;
 import com.example.cickmoviev2.data.api.repository.callback.OnCastCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnTvShowCallback;
+import com.example.cickmoviev2.data.local.database.FavoriteHelper;
 import com.example.cickmoviev2.data.models.Cast;
 import com.example.cickmoviev2.data.models.Credit;
 import com.example.cickmoviev2.data.models.Genres;
@@ -41,16 +42,24 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
     private RecyclerView rvTvShowCast;
     private MaterialButton btnFavorite;
     private TvShow tvShow;
+    private FavoriteHelper favoriteHelper;
     private List<Genres> tvShowGenres;
     private List<Cast> tvShowCasts;
     private boolean isFavorite = false;
+    private String EXTRAS_ID;
+    private String favTitle, favPoster, favVoteAverage, favOverview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tv_show_detail);
 
+        EXTRAS_ID = getIntent().getStringExtra("ID");
+        String EXTRAS_TITLE = getIntent().getStringExtra("TITLE");
+
+        favoriteHelper = new FavoriteHelper(this);
         tvShowRepository = TvShowRepository.getInstance();
+
         lpiTvShowDetail = findViewById(R.id.lpiTvshowDetail);
         rvTvShowCast = findViewById(R.id.rvTvshowCast);
         btnFavorite = findViewById(R.id.btnFavorite);
@@ -62,9 +71,42 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
 
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getIntent().getStringExtra("TITLE"));
+        getSupportActionBar().setTitle(EXTRAS_TITLE);
 
-        loadTvShow(getIntent().getStringExtra("ID"));
+        updateFavoriteButton(EXTRAS_ID);
+        loadTvShow(EXTRAS_ID);
+    }
+
+    private void updateFavoriteButton(String tvId) {
+        isFavorite = favoriteHelper.checkFavoriteTvShow(Integer.parseInt(tvId));
+
+        if (!isFavorite) {
+            btnFavorite.setIconResource(R.drawable.ic_outline_favorite_24);
+        } else {
+            btnFavorite.setIconResource(R.drawable.ic_baseline_favorite_24);
+        }
+    }
+
+    private void btnFavoriteHandler() {
+        String textStatus;
+
+        if (!isFavorite) {
+            if (favoriteHelper.insertFavoriteTvShow(Integer.parseInt(EXTRAS_ID), favTitle, favPoster, favVoteAverage, favOverview)) {
+                textStatus = "Tv Show Has Been Added to Favorite";
+            } else {
+                textStatus = "Unable to Add Tv Show to Favorite";
+            }
+        } else {
+            if (favoriteHelper.deleteFavoriteTvShow(Integer.parseInt(EXTRAS_ID))) {
+                textStatus = "Tv Show Has Been Removed from Favorite";
+            } else {
+                textStatus = "Unable to Remove Tv Show from Favorite";
+            }
+        }
+        //make toast status
+        Toast.makeText(this, textStatus, Toast.LENGTH_SHORT).show();
+        //update favorite button
+        updateFavoriteButton(EXTRAS_ID);
     }
 
     @Override
@@ -161,6 +203,11 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
         etvOverview.setText(tvShow.getOverview());
         rbVoteAverage.setRating(Float.parseFloat(tvShow.getVoteAverage()) / 2);
 
+        favTitle = tvShow.getTitle();
+        favPoster = tvShow.getPosterUrl();
+        favVoteAverage = tvShow.getVoteAverage();
+        favOverview = tvShow.getOverview();
+
         StringBuilder genresText = new StringBuilder();
 
         for (Genres genres : tvShowGenres) {
@@ -176,17 +223,5 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
         Glide.with(TvShowDetailActivity.this)
                 .load(Const.IMG_URL_500 + tvShow.getBackdropUrl())
                 .into(ivBanner);
-    }
-
-    private void btnFavoriteHandler() {
-        if (!isFavorite) {
-            btnFavorite.setIconResource(R.drawable.ic_baseline_favorite_24);
-            Toast.makeText(this, "Tv Show has been added to favorite", Toast.LENGTH_SHORT).show();
-        } else {
-            btnFavorite.setIconResource(R.drawable.ic_outline_favorite_24);
-            Toast.makeText(this, "Tv Show has been removed from favorite", Toast.LENGTH_SHORT).show();
-        }
-
-        isFavorite = !isFavorite;
     }
 }

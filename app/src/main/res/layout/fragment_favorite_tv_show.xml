@@ -7,6 +7,16 @@
     android:background="@color/primaryColor"
     tools:context=".ui.fragments.FavoriteTvShowFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFavTvShow"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingVertical="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_list_layout" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clFavTvShowEmpty"
         android:layout_width="match_parent"

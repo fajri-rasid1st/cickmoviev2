@@ -94,13 +94,13 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
             if (favoriteHelper.insertFavoriteMovie(Integer.parseInt(EXTRAS_ID), favTitle, favPoster, favVoteAverage, favOverview)) {
                 textStatus = "Movie Has Been Added to Favorite";
             } else {
-                textStatus = "Unable to Add Movie From Favorite";
+                textStatus = "Unable to Add Movie to Favorite";
             }
         } else {
             if (favoriteHelper.deleteFavoriteMovie(Integer.parseInt(EXTRAS_ID))) {
-                textStatus = "Movie Has Been Removed to Favorite";
+                textStatus = "Movie Has Been Removed from Favorite";
             } else {
-                textStatus = "Unable to Remove Movie From Favorite";
+                textStatus = "Unable to Remove Movie from Favorite";
             }
         }
         //make toast status
