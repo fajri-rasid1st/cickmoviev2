@@ -25,6 +25,9 @@ import com.example.cickmoviev2.ui.adapters.MovieListAdapter;
 import com.example.cickmoviev2.ui.adapters.clicklisteners.OnFavoriteMovieItemClickListener;
 
 import java.util.List;
+import java.util.Objects;
+
+import es.dmoral.toasty.Toasty;
 
 public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieItemClickListener {
     private ConstraintLayout clFavMovieEmpty;
@@ -47,6 +50,9 @@ public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieIt
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorite_movie, container, false);
 
+        // Configure custom toast
+        Toasty.Config.getInstance().setTextSize(12).apply();
+
         clFavMovieEmpty = view.findViewById(R.id.clFavMovieEmpty);
         rvFavMovie = view.findViewById(R.id.rvFavMovie);
 
@@ -57,12 +63,6 @@ public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieIt
         loadData();
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadData();
     }
 
     private void loadData() {
@@ -108,18 +108,27 @@ public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieIt
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                // when item is successfully removed
-                if (favoriteHelper.deleteFavoriteMovie(listAdapter.getMovieAt(viewHolder.getAdapterPosition()).getId())) {
-                    listAdapter.remove(viewHolder.getAdapterPosition());
-                    rvFavMovie.removeViewAt(viewHolder.getAdapterPosition());
-                    listAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-                    listAdapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), listAdapter.getItemCount());
+                // position of item
+                int position = viewHolder.getAdapterPosition();
 
-                    Toast.makeText(getContext(), "Movie Has Been Removed from Favorite", Toast.LENGTH_SHORT).show();
+                // when item is successfully removed
+                if (favoriteHelper.deleteFavoriteMovie(listAdapter.getMovieAt(position).getId())) {
+                    listAdapter.remove(position);
+                    rvFavMovie.removeViewAt(position);
+                    listAdapter.notifyItemRemoved(position);
+                    listAdapter.notifyItemRangeChanged(position, listAdapter.getItemCount());
+
+                    Toasty.success(requireContext(),
+                            "Movie Has Been Removed from Favorite.",
+                            Toast.LENGTH_SHORT, true)
+                            .show();
                 }
                 // when item is failed to remove
                 else {
-                    Toast.makeText(getContext(), "Unable to Remove Movie from Favorite", Toast.LENGTH_SHORT).show();
+                    Toasty.error(requireContext(),
+                            "Unable to Remove Movie. Try Again.",
+                            Toast.LENGTH_SHORT, true)
+                            .show();
                 }
             }
         }).attachToRecyclerView(rvFavMovie);

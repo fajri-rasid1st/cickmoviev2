@@ -36,6 +36,8 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
 public class MovieDetailActivity extends AppCompatActivity implements View.OnClickListener {
     private Toolbar tbDetail;
     private LinearProgressIndicator lpiMovieDetail;
@@ -54,6 +56,9 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+
+        // Configure custom toast
+        Toasty.Config.getInstance().setTextSize(12).apply();
 
         tbDetail = findViewById(R.id.tbDetail);
         lpiMovieDetail = findViewById(R.id.lpiMovieDetail);
@@ -98,20 +103,26 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
 
         if (!isFavorite) {
             if (favoriteHelper.insertFavoriteMovie(Integer.parseInt(EXTRAS_ID), favTitle, favPoster, favVoteAverage, favOverview)) {
-                textStatus = "Movie Has Been Added to Favorite";
+                textStatus = "Movie Has Been Added to Favorite.";
             } else {
-                textStatus = "Unable to Add Movie to Favorite";
+                textStatus = "Unable to Add Movie. Try Again.";
             }
         } else {
             if (favoriteHelper.deleteFavoriteMovie(Integer.parseInt(EXTRAS_ID))) {
-                textStatus = "Movie Has Been Removed from Favorite";
+                textStatus = "Movie Has Been Removed from Favorite.";
             } else {
-                textStatus = "Unable to Remove Movie from Favorite";
+                textStatus = "Unable to Remove Movie. Try Again.";
             }
         }
-        //make toast status
-        Toast.makeText(this, textStatus, Toast.LENGTH_SHORT).show();
-        //update favorite button
+        // make toast status
+        if (textStatus.split(" ")[0].equalsIgnoreCase("UNABLE")) {
+            Toasty.error(this, textStatus, Toast.LENGTH_SHORT, true)
+                    .show();
+        } else {
+            Toasty.success(this, textStatus, Toast.LENGTH_SHORT, true)
+                    .show();
+        }
+        // update favorite button
         updateFavoriteButton(EXTRAS_ID);
     }
 

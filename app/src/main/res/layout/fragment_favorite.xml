@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primaryColor"
-            android:elevation="4dp"
+            android:elevation="8dp"
             app:tabIndicatorAnimationDuration="500"
             app:tabIndicatorAnimationMode="elastic"
             app:tabIndicatorColor="@color/secondaryColor"

@@ -26,6 +26,8 @@ import com.example.cickmoviev2.ui.adapters.clicklisteners.OnFavoriteTvShowItemCl
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
 public class FavoriteTvShowFragment extends Fragment implements OnFavoriteTvShowItemClickListener {
     private ConstraintLayout clFavTvShowEmpty;
     private RecyclerView rvFavTvShow;
@@ -47,6 +49,9 @@ public class FavoriteTvShowFragment extends Fragment implements OnFavoriteTvShow
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorite_tv_show, container, false);
 
+        // Configure custom toast
+        Toasty.Config.getInstance().setTextSize(12).apply();
+
         clFavTvShowEmpty = view.findViewById(R.id.clFavTvShowEmpty);
         rvFavTvShow = view.findViewById(R.id.rvFavTvShow);
 
@@ -57,12 +62,6 @@ public class FavoriteTvShowFragment extends Fragment implements OnFavoriteTvShow
         loadData();
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadData();
     }
 
     private void loadData() {
@@ -107,15 +106,23 @@ public class FavoriteTvShowFragment extends Fragment implements OnFavoriteTvShow
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if (favoriteHelper.deleteFavoriteTvShow(listAdapter.getTvShowAt(viewHolder.getAdapterPosition()).getId())) {
-                    listAdapter.remove(viewHolder.getAdapterPosition());
-                    rvFavTvShow.removeViewAt(viewHolder.getAdapterPosition());
-                    listAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-                    listAdapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), listAdapter.getItemCount());
+                int position = viewHolder.getAdapterPosition();
 
-                    Toast.makeText(getContext(), "Tv Show Has Been Removed from Favorite", Toast.LENGTH_SHORT).show();
+                if (favoriteHelper.deleteFavoriteTvShow(listAdapter.getTvShowAt(position).getId())) {
+                    listAdapter.remove(position);
+                    rvFavTvShow.removeViewAt(position);
+                    listAdapter.notifyItemRemoved(position);
+                    listAdapter.notifyItemRangeChanged(position, listAdapter.getItemCount());
+
+                    Toasty.success(requireContext(),
+                            "Tv Show Has Been Removed from Favorite.",
+                            Toast.LENGTH_SHORT, true)
+                            .show();
                 } else {
-                    Toast.makeText(getContext(), "Unable to Remove Tv Show from Favorite", Toast.LENGTH_SHORT).show();
+                    Toasty.error(requireContext(),
+                            "Unable to Remove Tv Show. Try Again.",
+                            Toast.LENGTH_SHORT, true)
+                            .show();
                 }
             }
         }).attachToRecyclerView(rvFavTvShow);

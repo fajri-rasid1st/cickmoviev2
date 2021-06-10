@@ -36,6 +36,8 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
 public class TvShowDetailActivity extends AppCompatActivity implements View.OnClickListener {
     private Toolbar tbDetail;
     private LinearProgressIndicator lpiTvShowDetail;
@@ -54,6 +56,9 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tv_show_detail);
+
+        // Configure custom toast
+        Toasty.Config.getInstance().setTextSize(12).apply();
 
         tbDetail = findViewById(R.id.tbDetail);
         lpiTvShowDetail = findViewById(R.id.lpiTvshowDetail);
@@ -98,20 +103,26 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
 
         if (!isFavorite) {
             if (favoriteHelper.insertFavoriteTvShow(Integer.parseInt(EXTRAS_ID), favTitle, favPoster, favVoteAverage, favOverview)) {
-                textStatus = "Tv Show Has Been Added to Favorite";
+                textStatus = "Tv Show Has Been Added to Favorite.";
             } else {
-                textStatus = "Unable to Add Tv Show to Favorite";
+                textStatus = "Unable to Add Tv Show. Try Again.";
             }
         } else {
             if (favoriteHelper.deleteFavoriteTvShow(Integer.parseInt(EXTRAS_ID))) {
                 textStatus = "Tv Show Has Been Removed from Favorite";
             } else {
-                textStatus = "Unable to Remove Tv Show from Favorite";
+                textStatus = "Unable to Remove Tv Show. Try Again.";
             }
         }
-        //make toast status
-        Toast.makeText(this, textStatus, Toast.LENGTH_SHORT).show();
-        //update favorite button
+        // make toast status
+        if (textStatus.split(" ")[0].equalsIgnoreCase("UNABLE")) {
+            Toasty.error(this, textStatus, Toast.LENGTH_SHORT, true)
+                    .show();
+        } else {
+            Toasty.success(this, textStatus, Toast.LENGTH_SHORT, true)
+                    .show();
+        }
+        // update favorite button
         updateFavoriteButton(EXTRAS_ID);
     }
 
