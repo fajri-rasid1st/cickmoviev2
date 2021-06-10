@@ -14,7 +14,16 @@ public class TvShow {
     private String title;
 
     @SerializedName("first_air_date")
-    private String releaseDate;
+    private String firstAirDate;
+
+    @SerializedName("last_air_date")
+    private String lastAirDate;
+
+    @SerializedName("number_of_episodes")
+    private String totalEpisode;
+
+    @SerializedName("number_of_seasons")
+    private String totalSeason;
 
     @SerializedName("vote_average")
     private String voteAverage;
@@ -45,7 +54,7 @@ public class TvShow {
         this.title = title;
     }
 
-    public String getReleaseDate() {
+    public String getFirstAirDate() {
         SimpleDateFormat currentFormat = new SimpleDateFormat("yyyy-MM-dd",
                 new Locale("en", "US"));
         SimpleDateFormat resultFormat = new SimpleDateFormat("MMM dd, yyyy",
@@ -53,17 +62,56 @@ public class TvShow {
         Date date = null;
 
         try {
-            date = currentFormat.parse(releaseDate);
+            date = currentFormat.parse(firstAirDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        assert date != null;
-        return resultFormat.format(date);
+        return date != null ? resultFormat.format(date) : "None";
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setFirstAirDate(String firstAirDate) {
+        this.firstAirDate = firstAirDate;
+    }
+
+    public String getLastAirDate() {
+        SimpleDateFormat currentFormat = new SimpleDateFormat("yyyy-MM-dd",
+                new Locale("en", "US"));
+        SimpleDateFormat resultFormat = new SimpleDateFormat("MMM dd, yyyy",
+                new Locale("en", "US"));
+        Date date = null;
+
+        try {
+            date = currentFormat.parse(lastAirDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date != null ? resultFormat.format(date) : "None";
+    }
+
+    public void setLastAirDate(String lastAirDate) {
+        this.lastAirDate = lastAirDate;
+    }
+
+    public String getFirstAndLastAirDate() {
+        return String.format("%s to %s", getFirstAirDate(), getLastAirDate());
+    }
+
+    public String getTotalEpisode() {
+        return totalEpisode;
+    }
+
+    public void setTotalEpisode(String totalEpisode) {
+        this.totalEpisode = totalEpisode;
+    }
+
+    public String getTotalSeason() {
+        return totalSeason;
+    }
+
+    public void setTotalSeason(String totalSeason) {
+        this.totalSeason = totalSeason;
     }
 
     public String getVoteAverage() {

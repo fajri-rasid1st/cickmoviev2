@@ -55,8 +55,7 @@ public class Movie {
             e.printStackTrace();
         }
 
-        assert date != null;
-        return resultFormat.format(date);
+        return date != null ? resultFormat.format(date) : "None";
     }
 
     public void setReleaseDate(String releaseDate) {

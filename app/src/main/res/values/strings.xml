@@ -17,7 +17,7 @@
     <string name="genres">genres</string>
     <string name="overview">overview</string>
     <string name="read_more">read more</string>
-    <string name="watch">watch</string>
+    <string name="watch">trailer</string>
     <string name="preview">preview</string>
     <string name="simple_title">The Garden Of Words</string>
     <string name="dot">‏‏‏‏‎ ‎ ‎‎‎•‏‏‎ ‏‏‎ ‎</string>
@@ -28,4 +28,8 @@
     <string name="your_favorite_tvshow_still_empty">Your Favorite TV Show Still Empty</string>
     <string name="it_looks_like">It looks like your internet connection has been lost. Connect to the internet, then come back again.</string>
     <string name="press_the_add_to_favorite_movie">Press the \"Add to Favorite\" button on the Movie or TV Show details to add a list of favorite.</string>
+    <string name="casts">Casts</string>
+    <string name="total_episode">Total Episode</string>
+    <string name="total_season">Total Season</string>
+    <string name="_0">0</string>
 </resources>

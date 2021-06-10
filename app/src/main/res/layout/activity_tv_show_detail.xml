@@ -12,7 +12,6 @@
         style="@style/Theme.Cickmoviev2"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="top"
         android:background="#00FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -230,7 +229,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/cvPosterDetail"
                         app:layout_constraintTop_toBottomOf="@id/tvTvshowFullTitleDetail"
-                        tools:text="Aug 26, 2016" />
+                        tools:text="Aug 26, 2016 to None" />
 
                     <LinearLayout
                         android:id="@+id/llRatingBar"
@@ -278,13 +277,86 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clEpisodesSeasons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clDetail">
+
+                <LinearLayout
+                    android:id="@+id/llTotalEpisode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toStartOf="@id/vSeparator"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tvTotalEpisode"
+                        style="@style/TextContent.Primary"
+                        android:gravity="center"
+                        android:text="@string/_0"
+                        android:textAllCaps="false"
+                        android:textColor="@color/secondaryColor" />
+
+                    <TextView
+                        style="@style/TextContent.SubText"
+                        android:gravity="center"
+                        android:text="@string/total_episode"
+                        android:textAllCaps="false"
+                        android:textColor="@color/textOnSecondary" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/vSeparator"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:background="@color/lightPrimaryColor"
+                    android:elevation="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/llTotalSeason"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/vSeparator"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tvTotalSeason"
+                        style="@style/TextContent.Primary"
+                        android:gravity="center"
+                        android:text="@string/_0"
+                        android:textAllCaps="false"
+                        android:textColor="@color/secondaryColor" />
+
+                    <TextView
+                        style="@style/TextContent.SubText"
+                        android:gravity="center"
+                        android:text="@string/total_season"
+                        android:textAllCaps="false"
+                        android:textColor="@color/textOnSecondary" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clBtnContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/clDetail">
+                app:layout_constraintTop_toBottomOf="@id/clEpisodesSeasons">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnWatch"
@@ -334,6 +406,47 @@
                 app:layout_constraintTop_toBottomOf="@id/clBtnContainer" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clTvshowCastContainer"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vSeparator0">
+
+                <TextView
+                    android:id="@+id/tvCastsTitle"
+                    style="@style/TextContent.Title"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@string/casts"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTvshowCast"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCastsTitle"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/item_cast_layout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/vSeparator1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/primaryColor"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clTvshowCastContainer" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clGenresContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -341,7 +454,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vSeparator0">
+                app:layout_constraintTop_toBottomOf="@id/vSeparator1">
 
                 <TextView
                     android:id="@+id/tvGenresTitle"
@@ -360,7 +473,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
-                android:id="@+id/vSeparator1"
+                android:id="@+id/vSeparator2"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="16dp"
@@ -379,7 +492,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vSeparator1">
+                app:layout_constraintTop_toBottomOf="@id/vSeparator2">
 
                 <TextView
                     android:id="@+id/tvOverviewTitle"
@@ -408,8 +521,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|bottom"
                         android:background="@android:color/transparent"
-                        android:paddingStart="8dp"
-                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
                         app:tint="@color/secondaryColor"
                         tools:ignore="ContentDescription,RtlSymmetry" />
 

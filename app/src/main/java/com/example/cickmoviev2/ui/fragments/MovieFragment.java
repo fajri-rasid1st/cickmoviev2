@@ -18,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.cickmoviev2.R;
 import com.example.cickmoviev2.data.api.repository.MovieRepository;
@@ -36,6 +35,7 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
         SwipeRefreshLayout.OnRefreshListener,
         SearchView.OnQueryTextListener {
 
+    private static final String TAG = "MOVIE";
     private SwipeRefreshLayout srlMovie;
     private LinearProgressIndicator lpiMovie;
     private ConstraintLayout clMovieError;
@@ -123,6 +123,7 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
     public void onClick(MoviePopular moviePopular) {
         Intent movieDetailActivity = new Intent(getContext(), MovieDetailActivity.class);
 
+        movieDetailActivity.putExtra("TAG", TAG);
         movieDetailActivity.putExtra("ID", moviePopular.getId());
         movieDetailActivity.putExtra("TITLE", moviePopular.getTitle());
 
@@ -157,10 +158,7 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
 
                 @Override
                 public void onFailure(String message) {
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
                     if (!responseSuccess) clMovieError.setVisibility(View.VISIBLE);
-
                     new Handler().postDelayed(() -> {
                         srlMovie.setRefreshing(false);
                         lpiMovie.hide();
@@ -190,11 +188,8 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
 
                 @Override
                 public void onFailure(String message) {
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
                     clMovieError.setVisibility(View.VISIBLE);
                     rvMovie.setVisibility(View.GONE);
-
                     new Handler().postDelayed(() -> {
                         srlMovie.setRefreshing(false);
                         lpiMovie.hide();

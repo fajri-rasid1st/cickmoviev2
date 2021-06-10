@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 
 import com.example.cickmoviev2.Const;
 import com.example.cickmoviev2.data.api.MovieApiService;
+import com.example.cickmoviev2.data.api.repository.callback.OnCastCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnMovieCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnMovieSearchCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnPopularMoviesCallback;
+import com.example.cickmoviev2.data.models.Credit;
 import com.example.cickmoviev2.data.models.Movie;
 import com.example.cickmoviev2.data.models.MoviePopularResponse;
 
@@ -80,7 +82,29 @@ public class MovieRepository {
 
             @Override
             public void onFailure(@NonNull Call<Movie> call, @NonNull Throwable t) {
-                callback.onFailure(t.getMessage());
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
+
+    public void getMovieCast(String movieId, final OnCastCallback callback) {
+        movieService.getMovieCast(movieId, Const.API_KEY).enqueue(new Callback<Credit>() {
+            @Override
+            public void onResponse(@NonNull Call<Credit> call, @NonNull Response<Credit> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        callback.onSuccess(response.body(), response.message());
+                    } else {
+                        callback.onFailure(response.message());
+                    }
+                } else {
+                    callback.onFailure(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Credit> call, @NonNull Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
     }
@@ -106,7 +130,7 @@ public class MovieRepository {
 
             @Override
             public void onFailure(@NonNull Call<MoviePopularResponse> call, @NonNull Throwable t) {
-                callback.onFailure(t.getMessage());
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
     }

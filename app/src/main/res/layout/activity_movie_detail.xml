@@ -333,6 +333,47 @@
                 app:layout_constraintTop_toBottomOf="@id/clBtnContainer" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clMovieCastContainer"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vSeparator0">
+
+                <TextView
+                    android:id="@+id/tvCastsTitle"
+                    style="@style/TextContent.Title"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@string/casts"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvMovieCast"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCastsTitle"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/item_cast_layout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/vSeparator1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/primaryColor"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clMovieCastContainer" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clGenresContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -340,7 +381,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vSeparator0">
+                app:layout_constraintTop_toBottomOf="@id/vSeparator1">
 
                 <TextView
                     android:id="@+id/tvGenresTitle"
@@ -359,7 +400,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
-                android:id="@+id/vSeparator1"
+                android:id="@+id/vSeparator2"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="16dp"
@@ -378,7 +419,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vSeparator1">
+                app:layout_constraintTop_toBottomOf="@id/vSeparator2">
 
                 <TextView
                     android:id="@+id/tvOverviewTitle"
@@ -408,7 +449,6 @@
                         android:layout_gravity="end|bottom"
                         android:background="@android:color/transparent"
                         android:paddingStart="16dp"
-                        android:paddingBottom="16dp"
                         app:tint="@color/secondaryColor"
                         tools:ignore="ContentDescription,RtlSymmetry" />
 

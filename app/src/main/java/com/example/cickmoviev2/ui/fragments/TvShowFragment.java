@@ -18,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.cickmoviev2.R;
 import com.example.cickmoviev2.data.api.repository.TvShowRepository;
@@ -157,8 +156,6 @@ public class TvShowFragment extends Fragment implements OnTvShowItemClickListene
 
                 @Override
                 public void onFailure(String message) {
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
                     if (!responseSuccess) clTvShowError.setVisibility(View.VISIBLE);
 
                     new Handler().postDelayed(() -> {
@@ -190,8 +187,6 @@ public class TvShowFragment extends Fragment implements OnTvShowItemClickListene
 
                 @Override
                 public void onFailure(String message) {
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
                     clTvShowError.setVisibility(View.VISIBLE);
                     rvTvShow.setVisibility(View.GONE);
 

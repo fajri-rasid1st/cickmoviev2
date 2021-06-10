@@ -8,4 +8,5 @@ public class Const {
     // Base URL of Movie or TV Show poster
     public static final String IMG_URL_500 = "https://image.tmdb.org/t/p/w500/";
     public static final String IMG_URL_300 = "https://image.tmdb.org/t/p/w300/";
+    public static final String IMG_URL_200 = "https://image.tmdb.org/t/p/w200/";
 }

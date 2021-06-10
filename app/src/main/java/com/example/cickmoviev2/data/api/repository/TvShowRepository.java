@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 
 import com.example.cickmoviev2.Const;
 import com.example.cickmoviev2.data.api.TvShowApiService;
+import com.example.cickmoviev2.data.api.repository.callback.OnCastCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnPopularTvShowsCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnTvShowCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnTvShowSearchCallback;
+import com.example.cickmoviev2.data.models.Credit;
 import com.example.cickmoviev2.data.models.TvShow;
 import com.example.cickmoviev2.data.models.TvShowPopularResponse;
 
@@ -80,7 +82,29 @@ public class TvShowRepository {
 
             @Override
             public void onFailure(@NonNull Call<TvShow> call, @NonNull Throwable t) {
-                callback.onFailure(t.getMessage());
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
+
+    public void getTvShowCast(String tvId, final OnCastCallback callback) {
+        tvShowService.getTvShowCast(tvId, Const.API_KEY).enqueue(new Callback<Credit>() {
+            @Override
+            public void onResponse(@NonNull Call<Credit> call, @NonNull Response<Credit> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        callback.onSuccess(response.body(), response.message());
+                    } else {
+                        callback.onFailure(response.message());
+                    }
+                } else {
+                    callback.onFailure(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Credit> call, @NonNull Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
     }
@@ -106,7 +130,7 @@ public class TvShowRepository {
 
             @Override
             public void onFailure(@NonNull Call<TvShowPopularResponse> call, @NonNull Throwable t) {
-                callback.onFailure(t.getMessage());
+                callback.onFailure(t.getLocalizedMessage());
             }
         });
     }

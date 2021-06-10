@@ -1,5 +1,6 @@
 package com.example.cickmoviev2.data.api;
 
+import com.example.cickmoviev2.data.models.Credit;
 import com.example.cickmoviev2.data.models.Movie;
 import com.example.cickmoviev2.data.models.MoviePopularResponse;
 
@@ -17,6 +18,12 @@ public interface MovieApiService {
 
     @GET("movie/{movie_id}")
     Call<Movie> getMovie(
+            @Path("movie_id") String id,
+            @Query("api_key") String apiKey
+    );
+
+    @GET("movie/{movie_id}/credits")
+    Call<Credit> getMovieCast(
             @Path("movie_id") String id,
             @Query("api_key") String apiKey
     );
