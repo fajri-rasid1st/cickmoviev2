@@ -24,7 +24,7 @@ import com.example.cickmoviev2.R;
 import com.example.cickmoviev2.data.api.repository.MovieRepository;
 import com.example.cickmoviev2.data.api.repository.callback.OnCastCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnMovieCallback;
-import com.example.cickmoviev2.data.local.database.FavoriteDatabase;
+import com.example.cickmoviev2.data.local.database.FavoriteHelper;
 import com.example.cickmoviev2.data.models.Cast;
 import com.example.cickmoviev2.data.models.Credit;
 import com.example.cickmoviev2.data.models.Genres;
@@ -42,18 +42,23 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
     private RecyclerView rvMovieCast;
     private MaterialButton btnFavorite;
     private Movie movie;
-    private FavoriteDatabase roomDatabase;
+    private FavoriteHelper favoriteHelper;
     private List<Genres> movieGenres;
     private List<Cast> movieCasts;
     private boolean isFavorite = false;
+    private String EXTRAS_ID;
+    private String favTitle, favPoster, favVoteAverage, favOverview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
 
+        EXTRAS_ID = getIntent().getStringExtra("ID");
+        String EXTRAS_TITLE = getIntent().getStringExtra("TITLE");
+
+        favoriteHelper = new FavoriteHelper(this);
         movieRepository = MovieRepository.getInstance();
-        roomDatabase = FavoriteDatabase.getInstance(getApplicationContext());
 
         lpiMovieDetail = findViewById(R.id.lpiMovieDetail);
         rvMovieCast = findViewById(R.id.rvMovieCast);
@@ -66,25 +71,47 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
 
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getIntent().getStringExtra("TITLE"));
+        getSupportActionBar().setTitle(EXTRAS_TITLE);
 
-        checkIsFavorite(getIntent().getStringExtra("ID"));
-        loadMovie(getIntent().getStringExtra("ID"));
+        updateFavoriteButton(EXTRAS_ID);
+        loadMovie(EXTRAS_ID);
     }
 
-    private void checkIsFavorite(String movieId) {
-        isFavorite = roomDatabase.favoriteDao().isMovieExist(Integer.parseInt(movieId));
+    private void updateFavoriteButton(String movieId) {
+        isFavorite = favoriteHelper.checkFavoriteMovies(Integer.parseInt(movieId));
 
         if (!isFavorite) {
-            btnFavorite.setIconResource(R.drawable.ic_baseline_favorite_24);
-        } else {
             btnFavorite.setIconResource(R.drawable.ic_outline_favorite_24);
+        } else {
+            btnFavorite.setIconResource(R.drawable.ic_baseline_favorite_24);
         }
+    }
+
+    private void btnFavoriteHandler() {
+        String textStatus;
+
+        if (!isFavorite) {
+            if (favoriteHelper.insertFavoriteMovie(Integer.parseInt(EXTRAS_ID), favTitle, favPoster, favVoteAverage, favOverview)) {
+                textStatus = "Movie Has Been Added to Favorite";
+            } else {
+                textStatus = "Unable to Add Movie From Favorite";
+            }
+        } else {
+            if (favoriteHelper.deleteFavoriteMovie(Integer.parseInt(EXTRAS_ID))) {
+                textStatus = "Movie Has Been Removed to Favorite";
+            } else {
+                textStatus = "Unable to Remove Movie From Favorite";
+            }
+        }
+        //make toast status
+        Toast.makeText(this, textStatus, Toast.LENGTH_SHORT).show();
+        //update favorite button
+        updateFavoriteButton(EXTRAS_ID);
     }
 
     @Override
     public void onClick(View view) {
-        // if (view.getId() == R.id.btnFavorite) btnFavoriteHandler();
+        if (view.getId() == R.id.btnFavorite) btnFavoriteHandler();
     }
 
     @Override
@@ -171,6 +198,11 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
         tvVoteAverage.setText(movie.getVoteAverage());
         etvOverview.setText(movie.getOverview());
         rbVoteAverage.setRating(Float.parseFloat(movie.getVoteAverage()) / 2);
+
+        favTitle = movie.getTitle();
+        favPoster = movie.getPosterUrl();
+        favVoteAverage = movie.getVoteAverage();
+        favOverview = movie.getOverview();
 
         StringBuilder genresText = new StringBuilder();
 

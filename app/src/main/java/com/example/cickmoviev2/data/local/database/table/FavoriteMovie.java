@@ -23,9 +23,6 @@ public class FavoriteMovie implements Serializable {
     @ColumnInfo(name = "overview")
     private String overview;
 
-    public FavoriteMovie() {
-    }
-
     public FavoriteMovie(int id, String title, String posterPath, String voteAverage, String overview) {
         this.id = id;
         this.title = title;

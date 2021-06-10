@@ -6,11 +6,11 @@ import android.content.Context;
 import com.example.cickmoviev2.data.local.database.table.FavoriteMovie;
 import com.example.cickmoviev2.data.local.database.table.FavoriteTvShow;
 
-public class Helper {
+public class FavoriteHelper {
     private final FavoriteDatabase roomDatabase;
     private boolean status;
 
-    public Helper(Context context) {
+    public FavoriteHelper(Context context) {
         roomDatabase = FavoriteDatabase.getInstance(context);
         status = false;
     }

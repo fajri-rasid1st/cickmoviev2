@@ -15,6 +15,8 @@ import com.example.cickmoviev2.R;
 import com.example.cickmoviev2.ui.adapters.FavoritePagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.Objects;
+
 public class FavoriteFragment extends Fragment {
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -69,5 +71,7 @@ public class FavoriteFragment extends Fragment {
                 getString(R.string.label_tv));
 
         viewPager.setAdapter(favoritePagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
+        Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
     }
 }
