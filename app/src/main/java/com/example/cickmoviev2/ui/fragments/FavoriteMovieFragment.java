@@ -74,6 +74,7 @@ public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieIt
                     public void onChanged(List<FavoriteMovie> favoriteMovies) {
                         listAdapter = new MovieListAdapter(favoriteMovies);
                         listAdapter.setClickListener(FavoriteMovieFragment.this);
+                        listAdapter.notifyDataSetChanged();
                         rvFavMovie.setAdapter(listAdapter);
                         swipeToDelete(listAdapter, rvFavMovie);
 
@@ -104,7 +105,14 @@ public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieIt
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (favoriteHelper.deleteFavoriteMovie(listAdapter.getMovieAt(viewHolder.getAdapterPosition()).getId())) {
+
+                    listAdapter.remove(viewHolder.getAdapterPosition());
+                    rvFavMovie.removeViewAt(viewHolder.getAdapterPosition());
+                    listAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                    listAdapter.notifyItemRangeChanged(viewHolder.getAdapterPosition(), listAdapter.getItemCount());
+
                     Toast.makeText(getContext(), "Movie Has Been Removed from Favorite", Toast.LENGTH_SHORT).show();
+
                 } else {
                     Toast.makeText(getContext(), "Unable to Remove Movie from Favorite", Toast.LENGTH_SHORT).show();
                 }

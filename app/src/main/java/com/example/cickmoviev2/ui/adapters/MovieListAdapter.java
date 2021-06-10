@@ -53,6 +53,10 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
         return favoriteMovieList.get(position);
     }
 
+    public void remove(int position) {
+        favoriteMovieList.remove(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         FavoriteMovie favoriteMovie;
         ImageView ivPoster;
