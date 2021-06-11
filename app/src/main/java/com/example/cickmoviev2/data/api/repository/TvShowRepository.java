@@ -8,9 +8,11 @@ import com.example.cickmoviev2.data.api.repository.callback.OnCastCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnPopularTvShowsCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnTvShowCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnTvShowSearchCallback;
+import com.example.cickmoviev2.data.api.repository.callback.OnVideoCallback;
 import com.example.cickmoviev2.data.models.Credit;
 import com.example.cickmoviev2.data.models.TvShow;
 import com.example.cickmoviev2.data.models.TvShowPopularResponse;
+import com.example.cickmoviev2.data.models.VideoResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -111,6 +113,29 @@ public class TvShowRepository {
 
             @Override
             public void onFailure(@NonNull Call<Credit> call, @NonNull Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
+
+    // method to get tv show video
+    public void getTvShowVideo(String tvId, final OnVideoCallback callback) {
+        tvShowService.getTvShowVideo(tvId, Const.API_KEY).enqueue(new Callback<VideoResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<VideoResponse> call, @NonNull Response<VideoResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        callback.onSuccess(response.body(), response.message());
+                    } else {
+                        callback.onFailure(response.message());
+                    }
+                } else {
+                    callback.onFailure(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<VideoResponse> call, @NonNull Throwable t) {
                 callback.onFailure(t.getLocalizedMessage());
             }
         });

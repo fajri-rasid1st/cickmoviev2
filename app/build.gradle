@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.github.GrenderG:Toasty:1.5.0'
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 
     testImplementation 'junit:junit:4.13.2'
 
@@ -50,9 +51,7 @@ dependencies {
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
-
-    // optional - RxJava2 support for Room
-    implementation "androidx.room:room-rxjava2:$room_version"
+    
     // optional - RxJava3 support for Room
     implementation "androidx.room:room-rxjava3:$room_version"
     // optional - Guava support for Room, including Optional and ListenableFuture

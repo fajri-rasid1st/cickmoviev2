@@ -12,7 +12,7 @@ import com.example.cickmoviev2.data.local.database.table.FavoriteTvShow;
 
 import java.util.List;
 
-import io.reactivex.Completable;
+import io.reactivex.rxjava3.core.Completable;
 
 @Dao
 public interface FavoriteDao {

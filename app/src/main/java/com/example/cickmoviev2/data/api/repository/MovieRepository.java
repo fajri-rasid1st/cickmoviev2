@@ -8,9 +8,11 @@ import com.example.cickmoviev2.data.api.repository.callback.OnCastCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnMovieCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnMovieSearchCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnPopularMoviesCallback;
+import com.example.cickmoviev2.data.api.repository.callback.OnVideoCallback;
 import com.example.cickmoviev2.data.models.Credit;
 import com.example.cickmoviev2.data.models.Movie;
 import com.example.cickmoviev2.data.models.MoviePopularResponse;
+import com.example.cickmoviev2.data.models.VideoResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -116,6 +118,29 @@ public class MovieRepository {
         });
     }
 
+    // method to get movie video
+    public void getMovieVideo(String movieId, final OnVideoCallback callback) {
+        movieService.getMovieVideo(movieId, Const.API_KEY).enqueue(new Callback<VideoResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<VideoResponse> call, @NonNull Response<VideoResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        callback.onSuccess(response.body(), response.message());
+                    } else {
+                        callback.onFailure(response.message());
+                    }
+                } else {
+                    callback.onFailure(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<VideoResponse> call, @NonNull Throwable t) {
+                callback.onFailure(t.getLocalizedMessage());
+            }
+        });
+    }
+
     // method to get movies when searching
     public void searchMovies(final OnMovieSearchCallback callback, String query, int page) {
         movieService.searchMovies(Const.API_KEY, query, page).enqueue(new Callback<MoviePopularResponse>() {
@@ -132,7 +157,7 @@ public class MovieRepository {
                         callback.onFailure(response.message());
                     }
                 } else {
-                    callback.onFailure(response.message() + " : " + response.code());
+                    callback.onFailure(response.message());
                 }
             }
 

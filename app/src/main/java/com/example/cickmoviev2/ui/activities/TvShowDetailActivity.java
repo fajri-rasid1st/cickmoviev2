@@ -3,6 +3,7 @@ package com.example.cickmoviev2.ui.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +14,8 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -24,15 +27,21 @@ import com.example.cickmoviev2.R;
 import com.example.cickmoviev2.data.api.repository.TvShowRepository;
 import com.example.cickmoviev2.data.api.repository.callback.OnCastCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnTvShowCallback;
+import com.example.cickmoviev2.data.api.repository.callback.OnVideoCallback;
 import com.example.cickmoviev2.data.local.database.FavoriteHelper;
 import com.example.cickmoviev2.data.models.Cast;
 import com.example.cickmoviev2.data.models.Credit;
 import com.example.cickmoviev2.data.models.Genres;
 import com.example.cickmoviev2.data.models.TvShow;
+import com.example.cickmoviev2.data.models.Video;
+import com.example.cickmoviev2.data.models.VideoResponse;
 import com.example.cickmoviev2.ui.adapters.CastAdapter;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.List;
 
@@ -42,15 +51,23 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
     private Toolbar tbDetail;
     private LinearProgressIndicator lpiTvShowDetail;
     private MaterialButton btnFavorite;
+    private MaterialButton btnTrailer;
     private RecyclerView rvTvShowCast;
+    private YouTubePlayerView youTubePlayerView;
+    private ConstraintLayout clDetailBanner;
+    private ConstraintLayout clMovieDetailVideo;
+    private ConstraintLayout clDetailContainer;
     private TvShowRepository tvShowRepository;
     private TvShow tvShow;
+    private List<Video> tvShowVideos;
     private List<Genres> tvShowGenres;
     private List<Cast> tvShowCasts;
     private FavoriteHelper favoriteHelper;
+    private String videoKey;
     private String EXTRAS_ID, EXTRAS_TITLE;
     private String favTitle, favPoster, favVoteAverage, favOverview;
     private boolean isFavorite = false;
+    private boolean isVideoOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,17 +80,23 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
         tbDetail = findViewById(R.id.tbDetail);
         lpiTvShowDetail = findViewById(R.id.lpiTvshowDetail);
         btnFavorite = findViewById(R.id.btnFavorite);
+        btnTrailer = findViewById(R.id.btnTrailer);
         rvTvShowCast = findViewById(R.id.rvTvshowCast);
+        youTubePlayerView = findViewById(R.id.youtube_player_view);
+        clDetailBanner = findViewById(R.id.clDetailBanner);
+        clMovieDetailVideo = findViewById(R.id.clDetailVideo);
+        clDetailContainer = findViewById(R.id.clDetailContainer);
 
         tvShowRepository = TvShowRepository.getInstance();
-
         favoriteHelper = new FavoriteHelper(this);
 
         EXTRAS_ID = getIntent().getStringExtra("ID");
         EXTRAS_TITLE = getIntent().getStringExtra("TITLE");
 
         btnFavorite.setOnClickListener(this);
+        btnTrailer.setOnClickListener(this);
 
+        getLifecycle().addObserver(youTubePlayerView);
         setActionBar(EXTRAS_TITLE);
         updateFavoriteButton(EXTRAS_ID);
         loadTvShow(EXTRAS_ID);
@@ -126,9 +149,51 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
         updateFavoriteButton(EXTRAS_ID);
     }
 
+    private void btnTrailerHandler() {
+        if (videoKey != null) {
+            Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in);
+            Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
+
+            if (!isVideoOpen) {
+                clMovieDetailVideo.setVisibility(View.VISIBLE);
+                clMovieDetailVideo.startAnimation(animFadeIn);
+
+                clDetailBanner.setVisibility(View.INVISIBLE);
+                clDetailBanner.startAnimation(animFadeOut);
+
+                clDetailContainer.setVisibility(View.INVISIBLE);
+                clDetailContainer.startAnimation(animFadeOut);
+
+                btnTrailer.setIconResource(R.drawable.ic_baseline_info_24);
+                btnTrailer.setText(getString(R.string.detail));
+            } else {
+                clMovieDetailVideo.setVisibility(View.INVISIBLE);
+                clMovieDetailVideo.startAnimation(animFadeOut);
+
+                clDetailBanner.setVisibility(View.VISIBLE);
+                clDetailBanner.startAnimation(animFadeIn);
+
+                clDetailContainer.setVisibility(View.VISIBLE);
+                clDetailContainer.startAnimation(animFadeIn);
+
+                btnTrailer.setIconResource(R.drawable.ic_baseline_play_arrow_24);
+                btnTrailer.setText(getString(R.string.trailer));
+            }
+
+            isVideoOpen = !isVideoOpen;
+        } else {
+            Toasty.error(this, "This Tv Show Has No Trailer.", Toast.LENGTH_SHORT, false)
+                    .show();
+        }
+    }
+
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnFavorite) btnFavoriteHandler();
+        if (view.getId() == R.id.btnFavorite) {
+            btnFavoriteHandler();
+        } else if (view.getId() == R.id.btnTrailer) {
+            btnTrailerHandler();
+        }
     }
 
     @Override
@@ -159,9 +224,10 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onSuccess(TvShow tvShowDetail, String message) {
                 tvShow = tvShowDetail;
-                tvShowGenres = tvShow.getGenres();
+                tvShowGenres = tvShowDetail.getGenres();
 
                 loadTvShowCast(tvId);
+                loadTvShowVideo(tvId);
                 setDetailActivityContent();
 
                 lpiTvShowDetail.hide();
@@ -191,7 +257,27 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onFailure(String message) {
                 Toast.makeText(TvShowDetailActivity.this, message, Toast.LENGTH_SHORT).show();
-                new Handler().postDelayed(() -> lpiTvShowDetail.hide(), 3000);
+            }
+        });
+    }
+
+    private void loadTvShowVideo(String tvId) {
+        tvShowRepository.getTvShowVideo(tvId, new OnVideoCallback() {
+            @Override
+            public void onSuccess(VideoResponse videoResponse, String message) {
+                tvShowVideos = videoResponse.getVideos();
+
+                for (Video video : tvShowVideos) {
+                    if (video.getSite().equalsIgnoreCase("YOUTUBE")) {
+                        videoKey = video.getKey();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(TvShowDetailActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -242,5 +328,12 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
         Glide.with(TvShowDetailActivity.this)
                 .load(Const.IMG_URL_500 + tvShow.getBackdropUrl())
                 .into(ivBanner);
+
+        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                youTubePlayer.cueVideo(videoKey != null ? videoKey : "", 0);
+            }
+        });
     }
 }

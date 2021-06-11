@@ -1,6 +1,7 @@
 package com.example.cickmoviev2.data.api;
 
 import com.example.cickmoviev2.data.models.Credit;
+import com.example.cickmoviev2.data.models.VideoResponse;
 import com.example.cickmoviev2.data.models.TvShow;
 import com.example.cickmoviev2.data.models.TvShowPopularResponse;
 
@@ -27,6 +28,13 @@ public interface TvShowApiService {
     // method to get tv show casts based on tvId from API
     @GET("tv/{tv_id}/credits")
     Call<Credit> getTvShowCast(
+            @Path("tv_id") String id,
+            @Query("api_key") String apiKey
+    );
+
+    // method to get tv show video based on tvId from API
+    @GET("tv/{tv_id}/videos")
+    Call<VideoResponse> getTvShowVideo(
             @Path("tv_id") String id,
             @Query("api_key") String apiKey
     );

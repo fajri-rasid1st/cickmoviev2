@@ -3,6 +3,7 @@ package com.example.cickmoviev2.ui.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +14,8 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -24,15 +27,21 @@ import com.example.cickmoviev2.R;
 import com.example.cickmoviev2.data.api.repository.MovieRepository;
 import com.example.cickmoviev2.data.api.repository.callback.OnCastCallback;
 import com.example.cickmoviev2.data.api.repository.callback.OnMovieCallback;
+import com.example.cickmoviev2.data.api.repository.callback.OnVideoCallback;
 import com.example.cickmoviev2.data.local.database.FavoriteHelper;
 import com.example.cickmoviev2.data.models.Cast;
 import com.example.cickmoviev2.data.models.Credit;
 import com.example.cickmoviev2.data.models.Genres;
 import com.example.cickmoviev2.data.models.Movie;
+import com.example.cickmoviev2.data.models.Video;
+import com.example.cickmoviev2.data.models.VideoResponse;
 import com.example.cickmoviev2.ui.adapters.CastAdapter;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.List;
 
@@ -42,15 +51,23 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
     private Toolbar tbDetail;
     private LinearProgressIndicator lpiMovieDetail;
     private MaterialButton btnFavorite;
+    private MaterialButton btnTrailer;
     private RecyclerView rvMovieCast;
+    private YouTubePlayerView youTubePlayerView;
+    private ConstraintLayout clDetailBanner;
+    private ConstraintLayout clMovieDetailVideo;
+    private ConstraintLayout clDetailContainer;
     private MovieRepository movieRepository;
     private Movie movie;
+    private List<Video> movieVideos;
     private List<Genres> movieGenres;
     private List<Cast> movieCasts;
     private FavoriteHelper favoriteHelper;
+    private String videoKey;
     private String EXTRAS_ID, EXTRAS_TITLE;
     private String favTitle, favPoster, favVoteAverage, favOverview;
     private boolean isFavorite = false;
+    private boolean isVideoOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,17 +80,23 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
         tbDetail = findViewById(R.id.tbDetail);
         lpiMovieDetail = findViewById(R.id.lpiMovieDetail);
         btnFavorite = findViewById(R.id.btnFavorite);
+        btnTrailer = findViewById(R.id.btnTrailer);
         rvMovieCast = findViewById(R.id.rvMovieCast);
+        youTubePlayerView = findViewById(R.id.youtube_player_view);
+        clDetailBanner = findViewById(R.id.clDetailBanner);
+        clMovieDetailVideo = findViewById(R.id.clDetailVideo);
+        clDetailContainer = findViewById(R.id.clDetailContainer);
 
         movieRepository = MovieRepository.getInstance();
-
         favoriteHelper = new FavoriteHelper(this);
 
         EXTRAS_ID = getIntent().getStringExtra("ID");
         EXTRAS_TITLE = getIntent().getStringExtra("TITLE");
 
         btnFavorite.setOnClickListener(this);
+        btnTrailer.setOnClickListener(this);
 
+        getLifecycle().addObserver(youTubePlayerView);
         setActionBar(EXTRAS_TITLE);
         updateFavoriteButton(EXTRAS_ID);
         loadMovie(EXTRAS_ID);
@@ -126,9 +149,51 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
         updateFavoriteButton(EXTRAS_ID);
     }
 
+    private void btnTrailerHandler() {
+        if (videoKey != null) {
+            Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in);
+            Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
+
+            if (!isVideoOpen) {
+                clMovieDetailVideo.setVisibility(View.VISIBLE);
+                clMovieDetailVideo.startAnimation(animFadeIn);
+
+                clDetailBanner.setVisibility(View.INVISIBLE);
+                clDetailBanner.startAnimation(animFadeOut);
+
+                clDetailContainer.setVisibility(View.INVISIBLE);
+                clDetailContainer.startAnimation(animFadeOut);
+
+                btnTrailer.setIconResource(R.drawable.ic_baseline_info_24);
+                btnTrailer.setText(getString(R.string.detail));
+            } else {
+                clMovieDetailVideo.setVisibility(View.INVISIBLE);
+                clMovieDetailVideo.startAnimation(animFadeOut);
+
+                clDetailBanner.setVisibility(View.VISIBLE);
+                clDetailBanner.startAnimation(animFadeIn);
+
+                clDetailContainer.setVisibility(View.VISIBLE);
+                clDetailContainer.startAnimation(animFadeIn);
+
+                btnTrailer.setIconResource(R.drawable.ic_baseline_play_arrow_24);
+                btnTrailer.setText(getString(R.string.trailer));
+            }
+
+            isVideoOpen = !isVideoOpen;
+        } else {
+            Toasty.error(this, "This Movie Has No Trailer.", Toast.LENGTH_SHORT, false)
+                    .show();
+        }
+    }
+
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnFavorite) btnFavoriteHandler();
+        if (view.getId() == R.id.btnFavorite) {
+            btnFavoriteHandler();
+        } else if (view.getId() == R.id.btnTrailer) {
+            btnTrailerHandler();
+        }
     }
 
     @Override
@@ -159,9 +224,10 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(Movie movieDetail, String message) {
                 movie = movieDetail;
-                movieGenres = movie.getGenres();
+                movieGenres = movieDetail.getGenres();
 
                 loadMovieCast(movieId);
+                loadMovieVideo(movieId);
                 setDetailActivityContent();
 
                 lpiMovieDetail.hide();
@@ -184,14 +250,32 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
                 rvMovieCast.setAdapter(new CastAdapter(movieCasts));
                 rvMovieCast.setLayoutManager(new LinearLayoutManager(MovieDetailActivity.this, RecyclerView.HORIZONTAL, false));
                 rvMovieCast.setHasFixedSize(true);
-
-                lpiMovieDetail.hide();
             }
 
             @Override
             public void onFailure(String message) {
                 Toast.makeText(MovieDetailActivity.this, message, Toast.LENGTH_SHORT).show();
-                new Handler().postDelayed(() -> lpiMovieDetail.hide(), 3000);
+            }
+        });
+    }
+
+    private void loadMovieVideo(String movieId) {
+        movieRepository.getMovieVideo(movieId, new OnVideoCallback() {
+            @Override
+            public void onSuccess(VideoResponse videoResponse, String message) {
+                movieVideos = videoResponse.getVideos();
+
+                for (Video video : movieVideos) {
+                    if (video.getSite().equalsIgnoreCase("YOUTUBE")) {
+                        videoKey = video.getKey();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(MovieDetailActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -238,5 +322,12 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
         Glide.with(MovieDetailActivity.this)
                 .load(Const.IMG_URL_500 + movie.getBackdropUrl())
                 .into(ivBanner);
+
+        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                youTubePlayer.cueVideo(videoKey != null ? videoKey : "", 0);
+            }
+        });
     }
 }

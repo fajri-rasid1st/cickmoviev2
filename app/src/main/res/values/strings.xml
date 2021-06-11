@@ -10,6 +10,7 @@
     <string name="dummy_text">Lorem ipsum dolor sit amet, consect adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes. Cum sociis natoque penatibus et magnis dis parturient montes. Cum sociis natoque penatibus et magnis dis parturient montes.</string>
     <string name="library">Library</string>
     <string name="detail">Detail</string>
+    <string name="trailer">Trailer</string>
     <string name="runtime">24 Mins</string>
     <string name="vote_count">2489 Votes</string>
     <string name="comix_wave_film">CoMix Wave Film</string>

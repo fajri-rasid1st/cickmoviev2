@@ -3,6 +3,7 @@ package com.example.cickmoviev2.data.api;
 import com.example.cickmoviev2.data.models.Credit;
 import com.example.cickmoviev2.data.models.Movie;
 import com.example.cickmoviev2.data.models.MoviePopularResponse;
+import com.example.cickmoviev2.data.models.VideoResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -27,6 +28,13 @@ public interface MovieApiService {
     // method to get movie casts based on movieId from API
     @GET("movie/{movie_id}/credits")
     Call<Credit> getMovieCast(
+            @Path("movie_id") String id,
+            @Query("api_key") String apiKey
+    );
+
+    // method to get movie video based on movieId from API
+    @GET("movie/{movie_id}/videos")
+    Call<VideoResponse> getMovieVideo(
             @Path("movie_id") String id,
             @Query("api_key") String apiKey
     );

@@ -137,10 +137,26 @@
                 app:layout_constraintTop_toBottomOf="@id/clTitleDetail">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clDetailVideo"
+                    android:layout_width="match_parent"
+                    android:layout_height="265dp"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                        android:id="@+id/youtube_player_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:autoPlay="false"
+                        app:showFullScreenButton="false" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clDetailBanner"
                     android:layout_width="match_parent"
                     android:layout_height="265dp"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -286,7 +302,7 @@
                 app:layout_constraintTop_toBottomOf="@id/clDetail">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnWatch"
+                    android:id="@+id/btnTrailer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
@@ -314,7 +330,7 @@
                     app:iconTint="@color/secondaryColor"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btnWatch"
+                    app:layout_constraintStart_toEndOf="@id/btnTrailer"
                     app:layout_constraintTop_toTopOf="parent"
                     app:rippleColor="@color/darkSecondaryColor"
                     app:strokeColor="@color/secondaryColor" />

@@ -29,6 +29,7 @@
 
         <activity
             android:name=".ui.activities.MainActivity"
+            android:configChanges="orientation"
             android:windowSoftInputMode="adjustPan" />
 
         <meta-data
