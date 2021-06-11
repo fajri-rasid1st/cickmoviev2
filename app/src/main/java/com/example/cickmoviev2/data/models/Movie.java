@@ -43,6 +43,8 @@ public class Movie {
     }
 
     public String getReleaseDate() {
+        if (releaseDate == null) return "None";
+
         SimpleDateFormat currentFormat = new SimpleDateFormat("yyyy-MM-dd",
                 new Locale("en", "US"));
         SimpleDateFormat resultFormat = new SimpleDateFormat("MMM dd, yyyy",

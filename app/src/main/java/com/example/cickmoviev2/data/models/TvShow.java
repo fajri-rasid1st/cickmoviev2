@@ -55,6 +55,8 @@ public class TvShow {
     }
 
     public String getFirstAirDate() {
+        if (firstAirDate == null) return "None";
+
         SimpleDateFormat currentFormat = new SimpleDateFormat("yyyy-MM-dd",
                 new Locale("en", "US"));
         SimpleDateFormat resultFormat = new SimpleDateFormat("MMM dd, yyyy",
@@ -75,6 +77,8 @@ public class TvShow {
     }
 
     public String getLastAirDate() {
+        if (lastAirDate == null) return "None";
+
         SimpleDateFormat currentFormat = new SimpleDateFormat("yyyy-MM-dd",
                 new Locale("en", "US"));
         SimpleDateFormat resultFormat = new SimpleDateFormat("MMM dd, yyyy",
