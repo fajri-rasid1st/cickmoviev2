@@ -25,7 +25,6 @@ import com.example.cickmoviev2.ui.adapters.MovieListAdapter;
 import com.example.cickmoviev2.ui.adapters.clicklisteners.OnFavoriteMovieItemClickListener;
 
 import java.util.List;
-import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 
@@ -114,7 +113,6 @@ public class FavoriteMovieFragment extends Fragment implements OnFavoriteMovieIt
                 // when item is successfully removed
                 if (favoriteHelper.deleteFavoriteMovie(listAdapter.getMovieAt(position).getId())) {
                     listAdapter.remove(position);
-                    rvFavMovie.removeViewAt(position);
                     listAdapter.notifyItemRemoved(position);
                     listAdapter.notifyItemRangeChanged(position, listAdapter.getItemCount());
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +28,8 @@ import com.example.cickmoviev2.data.models.TvShowPopular;
 import com.example.cickmoviev2.ui.activities.TvShowDetailActivity;
 import com.example.cickmoviev2.ui.adapters.TvShowGridAdapter;
 import com.example.cickmoviev2.ui.adapters.clicklisteners.OnTvShowItemClickListener;
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.List;
@@ -35,6 +38,8 @@ public class TvShowFragment extends Fragment implements OnTvShowItemClickListene
         SwipeRefreshLayout.OnRefreshListener,
         SearchView.OnQueryTextListener {
 
+    private BottomNavigationView bnvMain;
+    private CoordinatorLayout.LayoutParams params;
     private SwipeRefreshLayout srlTvShow;
     private LinearProgressIndicator lpiTvShow;
     private ConstraintLayout clTvShowError;
@@ -60,6 +65,9 @@ public class TvShowFragment extends Fragment implements OnTvShowItemClickListene
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tv_show, container, false);
 
+
+        bnvMain = requireActivity().findViewById(R.id.bnvMain);
+        params = (CoordinatorLayout.LayoutParams) bnvMain.getLayoutParams();
         srlTvShow = view.findViewById(R.id.srlTvshow);
         lpiTvShow = view.findViewById(R.id.lpiTvshow);
         clTvShowError = view.findViewById(R.id.clTvshowError);
@@ -67,6 +75,7 @@ public class TvShowFragment extends Fragment implements OnTvShowItemClickListene
         rvTvShow = view.findViewById(R.id.rvTvshow);
         tvShowRepository = TvShowRepository.getInstance();
 
+        params.setBehavior(new HideBottomViewOnScrollBehavior());
         srlTvShow.setOnRefreshListener(this);
         getRepositoryData("", currentPage);
         onScrollListener();

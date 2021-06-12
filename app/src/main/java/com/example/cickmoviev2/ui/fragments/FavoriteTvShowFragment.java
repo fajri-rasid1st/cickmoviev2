@@ -110,7 +110,6 @@ public class FavoriteTvShowFragment extends Fragment implements OnFavoriteTvShow
 
                 if (favoriteHelper.deleteFavoriteTvShow(listAdapter.getTvShowAt(position).getId())) {
                     listAdapter.remove(position);
-                    rvFavTvShow.removeViewAt(position);
                     listAdapter.notifyItemRemoved(position);
                     listAdapter.notifyItemRangeChanged(position, listAdapter.getItemCount());
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +28,8 @@ import com.example.cickmoviev2.data.models.MoviePopular;
 import com.example.cickmoviev2.ui.activities.MovieDetailActivity;
 import com.example.cickmoviev2.ui.adapters.MovieGridAdapter;
 import com.example.cickmoviev2.ui.adapters.clicklisteners.OnMovieItemClickListener;
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.List;
@@ -35,6 +38,8 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
         SwipeRefreshLayout.OnRefreshListener,
         SearchView.OnQueryTextListener {
 
+    private BottomNavigationView bnvMain;
+    private CoordinatorLayout.LayoutParams params;
     private SwipeRefreshLayout srlMovie;
     private LinearProgressIndicator lpiMovie;
     private ConstraintLayout clMovieError;
@@ -60,6 +65,8 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
 
+        bnvMain = requireActivity().findViewById(R.id.bnvMain);
+        params = (CoordinatorLayout.LayoutParams) bnvMain.getLayoutParams();
         srlMovie = view.findViewById(R.id.srlMovie);
         lpiMovie = view.findViewById(R.id.lpiMovie);
         clMovieError = view.findViewById(R.id.clMovieError);
@@ -67,6 +74,7 @@ public class MovieFragment extends Fragment implements OnMovieItemClickListener,
         rvMovie = view.findViewById(R.id.rvMovie);
         movieRepository = MovieRepository.getInstance();
 
+        params.setBehavior(new HideBottomViewOnScrollBehavior());
         srlMovie.setOnRefreshListener(this);
         getRepositoryData("", currentPage);
         onScrollListener();
