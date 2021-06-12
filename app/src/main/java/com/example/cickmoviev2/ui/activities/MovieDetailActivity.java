@@ -18,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,24 +51,22 @@ import es.dmoral.toasty.Toasty;
 public class MovieDetailActivity extends AppCompatActivity implements View.OnClickListener {
     private Toolbar tbDetail;
     private LinearProgressIndicator lpiMovieDetail;
-    private MaterialButton btnFavorite;
-    private MaterialButton btnTrailer;
+    private MaterialButton btnFavorite, btnTrailer;
     private RecyclerView rvMovieCast;
     private YouTubePlayerView youTubePlayerView;
-    private ConstraintLayout clDetailBanner;
-    private ConstraintLayout clMovieDetailVideo;
-    private ConstraintLayout clDetailContainer;
+    private ScrollView svDetail;
+    private ConstraintLayout clDetailBanner, clMovieDetailVideo, clDetailContainer;
     private MovieRepository movieRepository;
     private Movie movie;
     private List<Video> movieVideos;
     private List<Genres> movieGenres;
     private List<Cast> movieCasts;
     private FavoriteHelper favoriteHelper;
+    private ActivityHelper activityHelper;
     private String videoKey;
     private String EXTRAS_ID, EXTRAS_TITLE;
     private String favTitle, favPoster, favVoteAverage, favOverview;
-    private boolean isFavorite = false;
-    private boolean isVideoOpen = false;
+    private boolean isFavorite = false, isVideoOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +82,14 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
         btnTrailer = findViewById(R.id.btnTrailer);
         rvMovieCast = findViewById(R.id.rvMovieCast);
         youTubePlayerView = findViewById(R.id.youtube_player_view);
+        svDetail = findViewById(R.id.svDetail);
         clDetailBanner = findViewById(R.id.clDetailBanner);
         clMovieDetailVideo = findViewById(R.id.clDetailVideo);
         clDetailContainer = findViewById(R.id.clDetailContainer);
 
         movieRepository = MovieRepository.getInstance();
         favoriteHelper = new FavoriteHelper(this);
+        activityHelper = new ActivityHelper();
 
         EXTRAS_ID = getIntent().getStringExtra("ID");
         EXTRAS_TITLE = getIntent().getStringExtra("TITLE");
@@ -166,6 +167,8 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
 
                 btnTrailer.setIconResource(R.drawable.ic_baseline_info_24);
                 btnTrailer.setText(getString(R.string.detail));
+
+                activityHelper.scrollToView(svDetail, clMovieDetailVideo);
             } else {
                 clMovieDetailVideo.setVisibility(View.INVISIBLE);
                 clMovieDetailVideo.startAnimation(animFadeOut);
@@ -178,6 +181,8 @@ public class MovieDetailActivity extends AppCompatActivity implements View.OnCli
 
                 btnTrailer.setIconResource(R.drawable.ic_baseline_play_arrow_24);
                 btnTrailer.setText(getString(R.string.trailer));
+
+                activityHelper.scrollToView(svDetail, clDetailBanner);
             }
 
             isVideoOpen = !isVideoOpen;

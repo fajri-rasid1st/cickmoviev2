@@ -18,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,24 +51,22 @@ import es.dmoral.toasty.Toasty;
 public class TvShowDetailActivity extends AppCompatActivity implements View.OnClickListener {
     private Toolbar tbDetail;
     private LinearProgressIndicator lpiTvShowDetail;
-    private MaterialButton btnFavorite;
-    private MaterialButton btnTrailer;
+    private MaterialButton btnFavorite, btnTrailer;
     private RecyclerView rvTvShowCast;
     private YouTubePlayerView youTubePlayerView;
-    private ConstraintLayout clDetailBanner;
-    private ConstraintLayout clMovieDetailVideo;
-    private ConstraintLayout clDetailContainer;
+    private ScrollView svDetail;
+    private ConstraintLayout clDetailBanner, clTvShowDetailVideo, clDetailContainer;
     private TvShowRepository tvShowRepository;
     private TvShow tvShow;
     private List<Video> tvShowVideos;
     private List<Genres> tvShowGenres;
     private List<Cast> tvShowCasts;
     private FavoriteHelper favoriteHelper;
+    private ActivityHelper activityHelper;
     private String videoKey;
     private String EXTRAS_ID, EXTRAS_TITLE;
     private String favTitle, favPoster, favVoteAverage, favOverview;
-    private boolean isFavorite = false;
-    private boolean isVideoOpen = false;
+    private boolean isFavorite = false, isVideoOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +82,14 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
         btnTrailer = findViewById(R.id.btnTrailer);
         rvTvShowCast = findViewById(R.id.rvTvshowCast);
         youTubePlayerView = findViewById(R.id.youtube_player_view);
+        svDetail = findViewById(R.id.svDetail);
         clDetailBanner = findViewById(R.id.clDetailBanner);
-        clMovieDetailVideo = findViewById(R.id.clDetailVideo);
+        clTvShowDetailVideo = findViewById(R.id.clDetailVideo);
         clDetailContainer = findViewById(R.id.clDetailContainer);
 
         tvShowRepository = TvShowRepository.getInstance();
         favoriteHelper = new FavoriteHelper(this);
+        activityHelper = new ActivityHelper();
 
         EXTRAS_ID = getIntent().getStringExtra("ID");
         EXTRAS_TITLE = getIntent().getStringExtra("TITLE");
@@ -155,8 +156,8 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
             Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
 
             if (!isVideoOpen) {
-                clMovieDetailVideo.setVisibility(View.VISIBLE);
-                clMovieDetailVideo.startAnimation(animFadeIn);
+                clTvShowDetailVideo.setVisibility(View.VISIBLE);
+                clTvShowDetailVideo.startAnimation(animFadeIn);
 
                 clDetailBanner.setVisibility(View.INVISIBLE);
                 clDetailBanner.startAnimation(animFadeOut);
@@ -166,9 +167,11 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
 
                 btnTrailer.setIconResource(R.drawable.ic_baseline_info_24);
                 btnTrailer.setText(getString(R.string.detail));
+
+                activityHelper.scrollToView(svDetail, clTvShowDetailVideo);
             } else {
-                clMovieDetailVideo.setVisibility(View.INVISIBLE);
-                clMovieDetailVideo.startAnimation(animFadeOut);
+                clTvShowDetailVideo.setVisibility(View.INVISIBLE);
+                clTvShowDetailVideo.startAnimation(animFadeOut);
 
                 clDetailBanner.setVisibility(View.VISIBLE);
                 clDetailBanner.startAnimation(animFadeIn);
@@ -178,6 +181,8 @@ public class TvShowDetailActivity extends AppCompatActivity implements View.OnCl
 
                 btnTrailer.setIconResource(R.drawable.ic_baseline_play_arrow_24);
                 btnTrailer.setText(getString(R.string.trailer));
+
+                activityHelper.scrollToView(svDetail, clDetailBanner);
             }
 
             isVideoOpen = !isVideoOpen;
